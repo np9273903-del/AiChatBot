@@ -33,23 +33,30 @@ if (!$projectId) {
 
     <!-- LEFT / MAIN: AI CHAT & COLLABORATION FEED -->
     <div class="chat-panel" id="chatPanel">
-        <!-- CHAT HEADER (Matches Soen Video) -->
         <div class="chat-header">
             <div class="header-left">
-                <button class="icon-btn header-back-btn" id="backBtn" title="Back to Projects">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+                <button class="icon-btn header-btn" id="backBtn" title="Back to Projects">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                 </button>
-                <button class="btn-add-collab" id="inviteHeaderBtn" title="Invite Collaborators">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    <span>Add collaborator</span>
-                </button>
+                <div class="header-title-box">
+                    <div class="project-badge">
+                        <span class="pulse-dot"></span>
+                        <h2 id="projectTitle">Loading project…</h2>
+                    </div>
+                    <div class="header-meta">
+                        <span class="ai-status-pill">✦ Soen AI Active</span>
+                        <span class="meta-dot">·</span>
+                        <span id="memberCountBadge" class="members-badge">1 member</span>
+                    </div>
+                </div>
             </div>
             <div class="header-actions">
-                <button class="icon-btn header-member-icon" id="membersBtn" title="Collaborators">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <button class="btn small secondary" id="inviteHeaderBtn" title="Invite Collaborators">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+                    <span>Invite</span>
                 </button>
                 <button class="btn small studio-toggle-btn" id="toggleStudioBtn" title="Toggle Code Studio">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/></svg>
                     <span id="toggleStudioText">Studio</span>
                 </button>
             </div>
@@ -64,24 +71,68 @@ if (!$projectId) {
         <div class="ai-typing-indicator" id="aiTypingIndicator">
             <div class="ai-typing-avatar">✦</div>
             <div class="ai-typing-content">
-                <div class="ai-typing-text">AI is coding…</div>
+                <div class="ai-typing-text">Soen AI is writing code & organizing files…</div>
                 <div class="ai-typing-dots"><span></span><span></span><span></span></div>
             </div>
         </div>
 
-        <!-- Message Composer (Matches Soen Video) -->
+        <!-- Quick Prompt Suggestion Chips -->
+        <div class="quick-chips-bar" id="quickChipsBar">
+            <button class="quick-chip" data-prompt="@ai create an express server with routes and package.json">
+                <span>⚡</span> Express Server
+            </button>
+            <button class="quick-chip" data-prompt="@ai Build a modern responsive HTML/CSS landing card component">
+                <span>🎨</span> Web UI Component
+            </button>
+            <button class="quick-chip" data-prompt="@ai Write a clean Python script to parse JSON and calculate statistics">
+                <span>🐍</span> Python Script
+            </button>
+            <button class="quick-chip" id="quickZipChip" title="Export all project files as a ZIP archive">
+                <span>📦</span> Download ZIP
+            </button>
+        </div>
+
+        <!-- Voice recording bar -->
+        <div class="recording-bar" id="recordingBar">
+            <div class="rec-status">
+                <span class="rec-dot"></span>
+                <span class="rec-label">Recording Voice Message</span>
+                <span class="rec-timer" id="recTimer">0:00</span>
+            </div>
+            <div class="rec-actions">
+                <button class="btn small secondary" id="cancelRecording">Cancel</button>
+                <button class="btn small btn-primary" id="stopRecording">Send Voice ➤</button>
+            </div>
+        </div>
+
+        <!-- Message Composer with all tools -->
         <div class="composer-container">
             <div class="composer-wrap">
-                <textarea id="messageInput" class="composer-textarea" rows="1" placeholder="Enter message"></textarea>
-                <div class="composer-actions-right">
-                    <button class="composer-icon-btn attach-btn-subtle" id="attachBtn" title="Attach file">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                <div class="composer-tools-left">
+                    <button class="composer-icon-btn" id="openCodeRunnerBtn" title="New Code Snippet in Studio">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    </button>
+                    <button class="composer-icon-btn" id="attachBtn" title="Attach File or Image">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
                     </button>
                     <input type="file" id="fileInput" hidden>
-                    <button class="send-btn" id="sendBtn" title="Send (Enter)">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                    <button class="composer-icon-btn" id="emojiBtn" title="Add Emoji">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
                     </button>
                 </div>
+                <textarea id="messageInput" class="composer-textarea" rows="1" placeholder="Type a message or prompt… use @ai to generate code or build full project"></textarea>
+                <div class="composer-tools-right">
+                    <button class="composer-icon-btn mic-btn" id="micBtn" title="Record Voice Note">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+                    </button>
+                    <button class="send-btn" id="sendBtn" title="Send (Enter)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="emoji-picker" id="emojiPicker"></div>
+            <div class="composer-footer-hint">
+                <span>Tip: Type <strong>@ai</strong> to code with AI · Mention <strong>@user</strong> to alert teammate · Shift+Enter for new line</span>
             </div>
         </div>
     </div>
