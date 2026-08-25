@@ -663,17 +663,14 @@ ${jsArt ? `<script>${jsArt.code}</script>` : ''}
         const wrap = document.createElement('div');
         wrap.className = 'msg-row ' + (isAi ? 'ai' : (isMine ? 'mine' : 'other'));
 
-        const avatar = document.createElement('div');
-        avatar.className = 'msg-avatar';
-        avatar.textContent = isAi ? '✦' : initialsOf(isMine ? (myUsername || 'You') : row.sender_label);
-        wrap.appendChild(avatar);
-
         const bubbleCol = document.createElement('div');
         bubbleCol.className = 'msg-col';
 
+        // Sender label above the bubble (Matches Soen Video)
         const meta = document.createElement('div');
         meta.className = 'msg-meta';
-        meta.innerHTML = `<span class="sender-name">${isAi ? '✦ Soen AI' : escapeHtml(isMine ? 'You' : (row.sender_label || 'User'))}</span> · <span>${formatTime(row.created_at)}</span>`;
+        const senderLabel = isAi ? 'AI' : (row.sender_label || (isMine ? (myUsername || myUserEmail || 'You') : 'User'));
+        meta.innerHTML = `<span class="sender-name">${escapeHtml(senderLabel)}</span>`;
         bubbleCol.appendChild(meta);
 
         const bubble = document.createElement('div');
