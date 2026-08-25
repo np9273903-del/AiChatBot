@@ -24,8 +24,8 @@ if (!defined('AI_PROVIDER'))    define('AI_PROVIDER',   'gemini');
 if (!defined('OPENAI_API_KEY')) define('OPENAI_API_KEY', getenv('OPENAI_API_KEY') ?: '');
 if (!defined('OPENAI_MODEL'))   define('OPENAI_MODEL',   'gpt-4o-mini');
 
-if (!defined('GEMINI_API_KEY')) define('GEMINI_API_KEY', getenv('GEMINI_API_KEY') ?: '');
-if (!defined('GEMINI_MODEL'))   define('GEMINI_MODEL',   'gemini-1.5-flash');
+if (!defined('GEMINI_API_KEY'))  define('GEMINI_API_KEY', getenv('GEMINI_API_KEY') ?: '');
+if (!defined('GEMINI_MODEL'))    define('GEMINI_MODEL',   'gemini-3-flash-preview');
 
 // ---- Email (real sending via PHP mail()) ----
 define('MAIL_FROM_EMAIL', 'no-reply@soen.local');

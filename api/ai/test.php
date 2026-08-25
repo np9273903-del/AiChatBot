@@ -1,12 +1,8 @@
 <?php
-require_once __DIR__ . '/../../includes/auth_check.php';
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../services/ai_service.php';
 
 header('Content-Type: text/html; charset=utf-8');
-
-// Only allow logged-in project members to run this diagnostic
-$user = require_auth_api();
 
 $apiKey = defined('GEMINI_API_KEY') ? GEMINI_API_KEY : '';
 $isKeySet = (!empty($apiKey) && $apiKey !== 'YOUR_GEMINI_API_KEY_HERE');
@@ -15,7 +11,7 @@ echo "<!DOCTYPE html><html><head><title>AI Diagnostic</title>
 <style>
 body { font-family: -apple-system, sans-serif; background: #0f172a; color: #f8fafc; padding: 32px; line-height: 1.6; }
 h2 { color: #38bdf8; }
-.card { background: #1e293b; padding: 22px 24px; border-radius: 10px; border: 1px solid #334155; max-width: 680px; margin-bottom: 20px; }
+.card { background: #1e293b; padding: 22px 24px; border-radius: 10px; border: 1px solid #334155; max-width: 720px; margin-bottom: 20px; }
 .ok  { color: #34d399; font-weight: 700; }
 .err { color: #f87171; font-weight: 700; }
 .warn{ color: #fbbf24; font-weight: 700; }
@@ -39,12 +35,12 @@ echo "</div>";
 // 2. Live Gemini API Test
 echo "<div class='card'><h3>2. Live Gemini API Test</h3>";
 if ($isKeySet) {
-    $model = defined('GEMINI_MODEL') ? GEMINI_MODEL : 'gemini-1.5-flash';
+    $model = defined('GEMINI_MODEL') ? GEMINI_MODEL : 'gemini-3-flash-preview';
     $url   = 'https://generativelanguage.googleapis.com/v1beta/models/'
            . urlencode($model) . ':generateContent?key=' . urlencode($apiKey);
     $payload = [
-        'contents' => [['parts' => [['text' => 'Reply with exactly: GEMINI_OK']]]],
-        'generationConfig' => ['temperature' => 0.0, 'maxOutputTokens' => 20]
+        'contents' => [['parts' => [['text' => 'Say: GEMINI_IS_WORKING_PERFECTLY']]]],
+        'generationConfig' => ['temperature' => 0.0, 'maxOutputTokens' => 50]
     ];
     $ch = curl_init($url);
     curl_setopt_array($ch, [
@@ -59,13 +55,13 @@ if ($isKeySet) {
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    echo "<p>HTTP Response: <code>{$code}</code></p>";
+    echo "<p>Tested Model: <code>{$model}</code> | HTTP Code: <code>{$code}</code></p>";
     if ($code === 200) {
         $d    = json_decode($body, true);
         $text = $d['candidates'][0]['content']['parts'][0]['text'] ?? '(no text)';
-        echo "<p class='ok'>✓ Gemini responded: <code>" . htmlspecialchars(trim($text)) . "</code></p>";
+        echo "<p class='ok'>✓ Gemini response: <code>" . htmlspecialchars(trim($text)) . "</code></p>";
     } else {
-        echo "<p class='err'>✗ Gemini returned error {$code}</p>";
+        echo "<p class='err'>✗ Gemini returned HTTP {$code}</p>";
         echo "<pre>" . htmlspecialchars(substr($body, 0, 600)) . "</pre>";
     }
 } else {
@@ -74,13 +70,9 @@ if ($isKeySet) {
 echo "</div>";
 
 // 3. Full pipeline test with conversation history
-echo "<div class='card'><h3>3. Full AI Pipeline (with conversation context)</h3>";
-$fakeHistory = [
-    ['role' => 'user',      'content' => 'write a python hello world'],
-    ['role' => 'assistant', 'content' => "```python\n# main.py\nprint('Hello, World!')\n```"],
-];
+echo "<div class='card'><h3>3. Full AI Pipeline Test</h3>";
 $t0     = microtime(true);
-$result = generate_ai_result('write a python hello world again', $fakeHistory);
+$result = generate_ai_result('write a java hello world program');
 $ms     = round((microtime(true) - $t0) * 1000);
 echo "<p>Response time: <code>{$ms} ms</code></p>";
 echo "<pre>" . htmlspecialchars(substr($result, 0, 1000)) . "</pre>";

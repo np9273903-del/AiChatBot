@@ -909,13 +909,28 @@ ${jsArt ? `<script>${jsArt.code}</script>` : ''}
         }
 
         try {
-            await fetch('api/messages/send.php', {
+            const res = await fetch('api/messages/send.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ project_id: projectId, message: text, client_id: clientId }),
             });
+            const data = await res.json().catch(() => ({}));
+            
+            if (isAiQuery) {
+                if (aiTypingIndicator) aiTypingIndicator.classList.remove('show');
+                if (data && data.ai_reply) {
+                    renderMessage({
+                        id: tempIdCounter--,
+                        user_id: null,
+                        sender_label: 'AI',
+                        message: data.ai_reply,
+                        is_ai: 1,
+                        created_at: new Date().toISOString()
+                    });
+                }
+            }
         } catch (e) {
-            console.error(e);
+            console.error('Send error:', e);
             if (aiTypingIndicator) aiTypingIndicator.classList.remove('show');
         }
     }

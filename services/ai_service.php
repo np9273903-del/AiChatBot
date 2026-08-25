@@ -82,8 +82,10 @@ function log_api_failure(string $provider, int $httpCode, string $body, string $
  */
 function generate_with_gemini(string $prompt, array $history = []): ?string {
     $apiKey = defined('GEMINI_API_KEY') ? GEMINI_API_KEY : '';
-    $model  = defined('GEMINI_MODEL')  ? GEMINI_MODEL  : 'gemini-1.5-flash';
     if (empty($apiKey) || $apiKey === 'YOUR_GEMINI_API_KEY_HERE') return null;
+
+    $primaryModel = defined('GEMINI_MODEL') ? GEMINI_MODEL : 'gemini-3-flash-preview';
+    $modelsToTry = array_unique([$primaryModel, 'gemini-3-flash-preview', 'gemini-3.5-flash', 'gemini-3.7-flash', 'gemini-flash-latest']);
 
     // Build multi-turn Gemini content from history
     $contents = [];
@@ -91,45 +93,47 @@ function generate_with_gemini(string $prompt, array $history = []): ?string {
         $geminiRole = ($turn['role'] === 'assistant') ? 'model' : 'user';
         $contents[] = ['role' => $geminiRole, 'parts' => [['text' => $turn['content']]]];
     }
-    // Append current user prompt (with system instruction prepended only to first turn)
     $systemInst = get_soen_system_instruction();
     $fullPrompt = empty($history) ? ($systemInst . "\n\nUser Request: " . $prompt) : $prompt;
     $contents[] = ['role' => 'user', 'parts' => [['text' => $fullPrompt]]];
-
-    $url = 'https://generativelanguage.googleapis.com/v1beta/models/'
-        . urlencode($model) . ':generateContent?key=' . urlencode($apiKey);
 
     $payload = [
         'contents' => $contents,
         'generationConfig' => ['temperature' => 0.5, 'maxOutputTokens' => 4096],
     ];
+    $jsonPayload = json_encode($payload);
 
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST           => true,
-        CURLOPT_HTTPHEADER     => [
-            'Content-Type: application/json',
-            'x-goog-api-key: ' . $apiKey,
-        ],
-        CURLOPT_POSTFIELDS     => json_encode($payload),
-        CURLOPT_TIMEOUT        => 15,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_SSL_VERIFYHOST => false,
-    ]);
-    $body     = curl_exec($ch);
-    $curlErr  = curl_error($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
+    foreach ($modelsToTry as $model) {
+        $url = 'https://generativelanguage.googleapis.com/v1beta/models/'
+            . urlencode($model) . ':generateContent?key=' . urlencode($apiKey);
 
-    if ($httpCode === 200) {
-        $data = json_decode($body, true);
-        $text = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
-        if ($text) return $text;
-        log_api_failure('Gemini', $httpCode, $body, 'Unexpected response structure');
-    } else {
-        log_api_failure('Gemini', $httpCode, (string)$body, $curlErr);
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST           => true,
+            CURLOPT_HTTPHEADER     => [
+                'Content-Type: application/json',
+                'x-goog-api-key: ' . $apiKey,
+            ],
+            CURLOPT_POSTFIELDS     => $jsonPayload,
+            CURLOPT_TIMEOUT        => 15,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+        ]);
+        $body     = curl_exec($ch);
+        $curlErr  = curl_error($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode === 200) {
+            $data = json_decode($body, true);
+            $text = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
+            if ($text) return $text;
+            log_api_failure("Gemini ($model)", $httpCode, $body, 'Unexpected response structure');
+        } else {
+            log_api_failure("Gemini ($model)", $httpCode, (string)$body, $curlErr);
+        }
     }
 
     return null;
