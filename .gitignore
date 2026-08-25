@@ -1,0 +1,20 @@
+# Environment and sensitive keys (if separated)
+# config/config.local.php
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+
+# Node / vendor (if any)
+node_modules/
+vendor/
+
+# User uploads (keep directory, ignore uploaded test media)
+uploads/*
+!uploads/.gitkeep
+
