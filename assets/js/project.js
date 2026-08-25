@@ -716,7 +716,7 @@ ${jsArt ? `<script>${jsArt.code}</script>` : ''}
                 cardEl.className = 'artifact-card';
                 const lines = item.code.split('\n').length;
                 const snippetPreview = item.code.split('\n').slice(0, 3).join('\n');
-                const icon = artObj.isWeb ? '🌐' : (item.language === 'python' ? '🐍' : (item.language === 'json' ? '📦' : '📄'));
+                const icon = artObj.isWeb ? '🌐' : (item.language === 'python' ? '🐍' : (item.language === 'java' ? '☕' : (item.language === 'cpp' || item.language === 'c' ? '⚡' : (item.language === 'json' ? '📦' : '📄'))));
 
                 cardEl.innerHTML = `
                     <div class="artifact-card-head">
