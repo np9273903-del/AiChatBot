@@ -60,6 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const languageExtensions = {
         javascript: 'js',
+        typescript: 'ts',
+        jsx: 'jsx',
+        tsx: 'tsx',
         html: 'html',
         css: 'css',
         python: 'py',
@@ -67,6 +70,14 @@ document.addEventListener('DOMContentLoaded', () => {
         java: 'java',
         c: 'c',
         cpp: 'cpp',
+        rust: 'rs',
+        go: 'go',
+        golang: 'go',
+        kotlin: 'kt',
+        swift: 'swift',
+        csharp: 'cs',
+        cs: 'cs',
+        ruby: 'rb',
         sql: 'sql',
         json: 'json'
     };
