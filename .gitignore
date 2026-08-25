@@ -1,5 +1,6 @@
-# Environment and sensitive keys (if separated)
-# config/config.local.php
+# Environment and sensitive keys (gitignored)
+config/config.local.php
+.env
 
 # OS files
 .DS_Store

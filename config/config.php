@@ -16,12 +16,16 @@ define('APP_URL', 'http://localhost/soen-php'); // change to your deployed URL
 
 // ---- AI provider ----
 // Choose 'openai' or 'gemini'. Add your API key below.
-define('AI_PROVIDER', 'gemini');
-define('OPENAI_API_KEY', getenv('OPENAI_API_KEY') ?: '');
-define('OPENAI_MODEL', 'gpt-4o-mini');
+if (file_exists(__DIR__ . '/config.local.php')) {
+    require_once __DIR__ . '/config.local.php';
+}
 
-define('GEMINI_API_KEY', getenv('GEMINI_API_KEY') ?: 'YOUR_GEMINI_API_KEY_HERE');
-define('GEMINI_MODEL', 'gemini-1.5-flash');
+if (!defined('AI_PROVIDER')) define('AI_PROVIDER', 'gemini');
+if (!defined('OPENAI_API_KEY')) define('OPENAI_API_KEY', getenv('OPENAI_API_KEY') ?: '');
+if (!defined('OPENAI_MODEL')) define('OPENAI_MODEL', 'gpt-4o-mini');
+
+if (!defined('GEMINI_API_KEY')) define('GEMINI_API_KEY', getenv('GEMINI_API_KEY') ?: 'YOUR_GEMINI_API_KEY_HERE');
+if (!defined('GEMINI_MODEL')) define('GEMINI_MODEL', 'gemini-1.5-flash');
 
 // ---- Email (real sending via PHP mail()) ----
 define('MAIL_FROM_EMAIL', 'no-reply@soen.local');
