@@ -46,7 +46,7 @@ if (preg_match_all('/@([\w.+-]+)/', $message, $matches)) {
         WHERE pu.project_id = ? AND (u.username = ? OR u.email LIKE CONCAT(?, "@%")) AND u.id != ?
     ');
     foreach ($mentions as $handle) {
-        if (strtolower($handle) === 'ai') continue; // that's the bot, not a mention
+        if (strtolower($handle) === 'ai') continue;
         $stmtM->bind_param('issi', $projectId, $handle, $handle, $user['id']);
         $stmtM->execute();
         $res = $stmtM->get_result();
@@ -57,11 +57,32 @@ if (preg_match_all('/@([\w.+-]+)/', $message, $matches)) {
     $stmtM->close();
 }
 
-// 3) @ai bot reply (mirrors server.js's aiIsPresentInMessage handling)
+// 3) @ai bot reply with conversation history context
 $aiReply = null;
 if (stripos($message, '@ai') !== false) {
     $prompt = trim(str_ireplace('@ai', '', $message));
-    $aiReply = generate_ai_result($prompt);
+
+    // FIX #1: Fetch last 10 messages for conversation context
+    $history = [];
+    $histStmt = $conn->prepare(
+        'SELECT sender_label, message, is_ai FROM messages
+         WHERE project_id = ? AND attachment_url IS NULL
+         ORDER BY id DESC LIMIT 10'
+    );
+    $histStmt->bind_param('i', $projectId);
+    $histStmt->execute();
+    $histRows = $histStmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    $histStmt->close();
+
+    // Reverse so oldest is first, then build role array
+    foreach (array_reverse($histRows) as $row) {
+        $role = $row['is_ai'] ? 'assistant' : 'user';
+        // Skip the current @ai message itself (it was just inserted)
+        if ($role === 'user' && trim($row['message']) === $message) continue;
+        $history[] = ['role' => $role, 'content' => $row['message']];
+    }
+
+    $aiReply = generate_ai_result($prompt, $history);
 
     $stmt = $conn->prepare('INSERT INTO messages (project_id, user_id, sender_label, message, is_ai) VALUES (?, NULL, "AI", ?, 1)');
     $stmt->bind_param('is', $projectId, $aiReply);

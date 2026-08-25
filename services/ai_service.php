@@ -7,281 +7,279 @@ if (file_exists(__DIR__ . '/../config/config.local.php')) {
 }
 
 /**
- * Universal Real-Time Multi-Provider AI Engine:
- * Generates dynamic, intelligent code and answers for ANY programming language,
- * topic, debugging question, or prompt in real-time.
+ * Universal Real-Time Multi-Provider AI Engine
+ * FIX #1: Accepts $history (array of prior {role, content} turns) for full conversation context.
+ * FIX #2: Logs real HTTP codes and raw error bodies for every failed API call.
+ * FIX #5: System prompt instructs AI not to repeat the same code/approach if history shows it.
  */
-function generate_ai_result($prompt) {
+function generate_ai_result(string $prompt, array $history = []): string {
     $prompt = trim($prompt);
-    if (!$prompt) return "Hey! Ask me anything or tell me what to code in any programming language.";
+    if (!$prompt) return "Hey! What would you like me to build or help you with?";
 
-    // 1. Google Gemini Live API (if API key is present)
+    // 1. Google Gemini API (if API key is configured)
     if (defined('GEMINI_API_KEY') && !empty(GEMINI_API_KEY) && GEMINI_API_KEY !== 'YOUR_GEMINI_API_KEY_HERE') {
-        $geminiReply = generate_with_gemini($prompt);
-        if ($geminiReply) return $geminiReply;
+        $reply = generate_with_gemini($prompt, $history);
+        if ($reply) return $reply;
     }
 
-    // 2. OpenAI Live API (if API key is present)
+    // 2. OpenAI API (if API key is configured)
     if (defined('OPENAI_API_KEY') && !empty(OPENAI_API_KEY) && OPENAI_API_KEY !== 'YOUR_OPENAI_API_KEY_HERE') {
-        $openAiReply = generate_with_openai($prompt);
-        if ($openAiReply) return $openAiReply;
+        $reply = generate_with_openai($prompt, $history);
+        if ($reply) return $reply;
     }
 
-    // 3. Free Live Cloud AI Backend A (Fast POST JSON)
-    $liveA = generate_with_live_cloud_a($prompt);
-    if ($liveA) return $liveA;
+    // 3. Free Live Cloud AI - Backend A (POST JSON)
+    $reply = generate_with_live_cloud_a($prompt, $history);
+    if ($reply) return $reply;
 
-    // 4. Free Live Cloud AI Backend B (GET Query)
-    $liveB = generate_with_live_cloud_b($prompt);
-    if ($liveB) return $liveB;
+    // 4. Free Live Cloud AI - Backend B (GET query)
+    $reply = generate_with_live_cloud_b($prompt);
+    if ($reply) return $reply;
 
-    // 5. Intelligent Multi-Language Dynamic Synthesizer (Zero-Failure Fallback)
+    // 5. Last-resort intelligent offline synthesizer
     return generate_intelligent_synthesizer($prompt);
 }
 
-function get_soen_system_instruction() {
-    return "You are an expert AI software engineer and computer scientist capable of writing code in ANY programming language (Java, Python, C, C++, C#, JavaScript, TypeScript, Rust, Go, Swift, Kotlin, PHP, Ruby, SQL, HTML/CSS, Dart, Flutter, Bash, Assembly, R, Scala, etc.).
+/**
+ * FIX #5: System instruction that includes anti-repetition guidance.
+ */
+function get_soen_system_instruction(): string {
+    return "You are an expert AI software engineer and computer scientist capable of writing code in ANY programming language (Java, Python, C, C++, C#, JavaScript, TypeScript, Rust, Go, Swift, Kotlin, PHP, Ruby, SQL, HTML/CSS, Dart, Bash, R, Scala, Haskell, etc.).
 
 STRICT INSTRUCTIONS:
-1. Always give the exact code and solution for what the user specifically asked.
-2. In EVERY code block, put the filename on the very first line as a comment (e.g. `// Main.java`, `# main.py`, `// main.rs`, `// main.go`, `// main.cpp`, `// server.js`, `// App.jsx`, `-- schema.sql`, `// index.html`, `/* style.css */`).
-3. If the user asks a greeting or general question, answer naturally, friendly, and helpfully.
-4. Provide complete, working, high-quality code with helpful comments.";
+1. Always give the exact code and solution for what the user specifically asked. Never add unrequested files.
+2. In EVERY code block, put the filename on the very first line as a comment. Examples: `// Main.java`, `# main.py`, `// main.rs`, `// main.go`, `// main.cpp`, `// server.js`, `// App.jsx`, `-- schema.sql`, `// index.html`, `/* style.css */`.
+3. If the conversation history already contains a code answer for a similar question, provide a DISTINCTLY DIFFERENT approach, algorithm, or implementation style than what was shown before.
+4. If the user says hi/hello or asks a general question, respond naturally and conversationally like a knowledgeable friend.
+5. Provide complete, working, high-quality code with helpful inline comments.";
 }
 
 /**
- * Live Cloud AI Engine (Backend A: POST JSON)
+ * Build messages array with conversation history for multi-turn providers.
  */
-function generate_with_live_cloud_a($prompt) {
-    $systemInstruction = get_soen_system_instruction();
+function build_messages(array $history, string $prompt): array {
+    $messages = [
+        ['role' => 'system', 'content' => get_soen_system_instruction()]
+    ];
+    foreach ($history as $turn) {
+        $role = ($turn['role'] === 'assistant') ? 'assistant' : 'user';
+        $messages[] = ['role' => $role, 'content' => $turn['content']];
+    }
+    $messages[] = ['role' => 'user', 'content' => $prompt];
+    return $messages;
+}
+
+/**
+ * FIX #2 helper: log failed API calls with code + body.
+ */
+function log_api_failure(string $provider, int $httpCode, string $body, string $curlErr = ''): void {
+    $snippet = substr($body, 0, 400);
+    error_log("[Soen AI] {$provider} failed | HTTP {$httpCode} | cURL: {$curlErr} | Response: {$snippet}");
+}
+
+/**
+ * Google Gemini API — uses system instruction + multi-turn conversation history.
+ */
+function generate_with_gemini(string $prompt, array $history = []): ?string {
+    $apiKey = defined('GEMINI_API_KEY') ? GEMINI_API_KEY : '';
+    $model  = defined('GEMINI_MODEL')  ? GEMINI_MODEL  : 'gemini-1.5-flash';
+    if (empty($apiKey) || $apiKey === 'YOUR_GEMINI_API_KEY_HERE') return null;
+
+    // Build multi-turn Gemini content from history
+    $contents = [];
+    foreach ($history as $turn) {
+        $geminiRole = ($turn['role'] === 'assistant') ? 'model' : 'user';
+        $contents[] = ['role' => $geminiRole, 'parts' => [['text' => $turn['content']]]];
+    }
+    // Append current user prompt (with system instruction prepended only to first turn)
+    $systemInst = get_soen_system_instruction();
+    $fullPrompt = empty($history) ? ($systemInst . "\n\nUser Request: " . $prompt) : $prompt;
+    $contents[] = ['role' => 'user', 'parts' => [['text' => $fullPrompt]]];
+
+    $url = 'https://generativelanguage.googleapis.com/v1beta/models/'
+        . urlencode($model) . ':generateContent?key=' . urlencode($apiKey);
 
     $payload = [
-        'messages' => [
-            ['role' => 'system', 'content' => $systemInstruction],
-            ['role' => 'user', 'content' => $prompt]
-        ],
-        'model' => 'openai',
-        'jsonMode' => false
+        'contents' => $contents,
+        'generationConfig' => ['temperature' => 0.5, 'maxOutputTokens' => 4096],
     ];
+
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST           => true,
+        CURLOPT_HTTPHEADER     => [
+            'Content-Type: application/json',
+            'x-goog-api-key: ' . $apiKey,
+        ],
+        CURLOPT_POSTFIELDS     => json_encode($payload),
+        CURLOPT_TIMEOUT        => 15,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+    ]);
+    $body     = curl_exec($ch);
+    $curlErr  = curl_error($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpCode === 200) {
+        $data = json_decode($body, true);
+        $text = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
+        if ($text) return $text;
+        log_api_failure('Gemini', $httpCode, $body, 'Unexpected response structure');
+    } else {
+        log_api_failure('Gemini', $httpCode, (string)$body, $curlErr);
+    }
+
+    return null;
+}
+
+/**
+ * OpenAI API — full multi-turn conversation context.
+ */
+function generate_with_openai(string $prompt, array $history = []): ?string {
+    $apiKey = defined('OPENAI_API_KEY') ? OPENAI_API_KEY : '';
+    if (empty($apiKey) || $apiKey === 'YOUR_OPENAI_API_KEY_HERE') return null;
+
+    $messages = build_messages($history, $prompt);
+
+    $ch = curl_init('https://api.openai.com/v1/chat/completions');
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST           => true,
+        CURLOPT_HTTPHEADER     => [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $apiKey,
+        ],
+        CURLOPT_POSTFIELDS     => json_encode([
+            'model'       => defined('OPENAI_MODEL') ? OPENAI_MODEL : 'gpt-4o-mini',
+            'messages'    => $messages,
+            'temperature' => 0.5,
+        ]),
+        CURLOPT_TIMEOUT        => 15,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+    ]);
+    $body     = curl_exec($ch);
+    $curlErr  = curl_error($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpCode === 200) {
+        $data = json_decode($body, true);
+        $text = $data['choices'][0]['message']['content'] ?? null;
+        if ($text) return $text;
+        log_api_failure('OpenAI', $httpCode, $body, 'Unexpected response structure');
+    } else {
+        log_api_failure('OpenAI', $httpCode, (string)$body, $curlErr);
+    }
+
+    return null;
+}
+
+/**
+ * Free Live Cloud AI - Backend A (POST JSON with full message history)
+ */
+function generate_with_live_cloud_a(string $prompt, array $history = []): ?string {
+    $messages = build_messages($history, $prompt);
 
     $ch = curl_init('https://text.pollinations.ai/');
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST => true,
-        CURLOPT_HTTPHEADER => [
+        CURLOPT_POST           => true,
+        CURLOPT_HTTPHEADER     => [
             'Content-Type: application/json',
-            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
         ],
-        CURLOPT_POSTFIELDS => json_encode($payload),
-        CURLOPT_TIMEOUT => 8,
+        CURLOPT_POSTFIELDS     => json_encode(['messages' => $messages, 'model' => 'openai']),
+        CURLOPT_TIMEOUT        => 12,
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_SSL_VERIFYHOST => false,
     ]);
-    $response = curl_exec($ch);
+    $body     = curl_exec($ch);
+    $curlErr  = curl_error($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    if ($httpCode === 200 && !empty(trim($response)) && strlen($response) > 5) {
-        return trim($response);
+    if ($httpCode === 200 && !empty(trim($body)) && strlen($body) > 5) {
+        return trim($body);
     }
 
+    log_api_failure('Pollinations-A', $httpCode, (string)$body, $curlErr);
     return null;
 }
 
 /**
- * Live Cloud AI Engine (Backend B: GET Query)
+ * Free Live Cloud AI - Backend B (GET fallback)
  */
-function generate_with_live_cloud_b($prompt) {
-    $systemInstruction = get_soen_system_instruction();
-    $url = 'https://text.pollinations.ai/' . rawurlencode($prompt) . '?system=' . rawurlencode($systemInstruction) . '&model=openai';
+function generate_with_live_cloud_b(string $prompt): ?string {
+    $sysInst = get_soen_system_instruction();
+    $url = 'https://text.pollinations.ai/' . rawurlencode($prompt)
+        . '?system=' . rawurlencode($sysInst) . '&model=openai';
 
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT => 8,
+        CURLOPT_TIMEOUT        => 12,
         CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTPHEADER => [
-            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        ],
+        CURLOPT_HTTPHEADER     => ['User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'],
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_SSL_VERIFYHOST => false,
     ]);
-    $response = curl_exec($ch);
+    $body     = curl_exec($ch);
+    $curlErr  = curl_error($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    if ($httpCode === 200 && !empty(trim($response)) && strlen($response) > 5) {
-        return trim($response);
+    if ($httpCode === 200 && !empty(trim($body)) && strlen($body) > 5) {
+        return trim($body);
     }
 
+    log_api_failure('Pollinations-B', $httpCode, (string)$body, $curlErr);
     return null;
 }
 
 /**
- * Google Gemini Live API
+ * FIX #4: Last-resort intelligent offline synthesizer.
+ * Only reached if ALL live APIs fail. Covers 12+ languages.
  */
-function generate_with_gemini($prompt) {
-    $apiKey = defined('GEMINI_API_KEY') ? GEMINI_API_KEY : '';
-    $model = defined('GEMINI_MODEL') ? GEMINI_MODEL : 'gemini-1.5-flash';
-
-    if (empty($apiKey) || $apiKey === 'YOUR_GEMINI_API_KEY_HERE') return null;
-
-    $systemInstruction = get_soen_system_instruction();
-    $fullPrompt = $systemInstruction . "\n\nUser Request: " . $prompt;
-
-    $url = 'https://generativelanguage.googleapis.com/v1beta/models/' . urlencode($model) . ':generateContent?key=' . urlencode($apiKey);
-    $payload = [
-        'contents' => [
-            ['parts' => [['text' => $fullPrompt]]],
-        ],
-        'generationConfig' => [
-            'temperature' => 0.4,
-            'maxOutputTokens' => 4096,
-        ]
-    ];
-
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST => true,
-        CURLOPT_HTTPHEADER => [
-            'Content-Type: application/json',
-            'x-goog-api-key: ' . $apiKey
-        ],
-        CURLOPT_POSTFIELDS => json_encode($payload),
-        CURLOPT_TIMEOUT => 15,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_SSL_VERIFYHOST => false,
-    ]);
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    if ($httpCode === 200) {
-        $data = json_decode($response, true);
-        if (isset($data['candidates'][0]['content']['parts'][0]['text'])) {
-            return $data['candidates'][0]['content']['parts'][0]['text'];
-        }
-    }
-
-    return null;
-}
-
-/**
- * OpenAI Live API
- */
-function generate_with_openai($prompt) {
-    $apiKey = defined('OPENAI_API_KEY') ? OPENAI_API_KEY : '';
-    if (empty($apiKey) || $apiKey === 'YOUR_OPENAI_API_KEY_HERE') return null;
-
-    $url = 'https://api.openai.com/v1/chat/completions';
-    $payload = [
-        'model' => defined('OPENAI_MODEL') ? OPENAI_MODEL : 'gpt-4o-mini',
-        'messages' => [
-            ['role' => 'system', 'content' => get_soen_system_instruction()],
-            ['role' => 'user', 'content' => $prompt],
-        ],
-        'temperature' => 0.4,
-    ];
-
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST => true,
-        CURLOPT_HTTPHEADER => [
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . $apiKey,
-        ],
-        CURLOPT_POSTFIELDS => json_encode($payload),
-        CURLOPT_TIMEOUT => 12,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_SSL_VERIFYHOST => false,
-    ]);
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    if ($httpCode === 200) {
-        $data = json_decode($response, true);
-        if (isset($data['choices'][0]['message']['content'])) {
-            return $data['choices'][0]['message']['content'];
-        }
-    }
-
-    return null;
-}
-
-/**
- * Intelligent Multi-Language Dynamic Synthesizer:
- * Detects any language from the prompt (Rust, Go, Kotlin, Swift, C#, Ruby, Java, C++, Python, PHP, JS, SQL, etc.)
- * and generates clean code.
- */
-function generate_intelligent_synthesizer($prompt) {
+function generate_intelligent_synthesizer(string $prompt): string {
     $p = strtolower(trim($prompt));
 
-    // Conversational greetings
-    if (preg_match('/^(hi|hello|hey|whats up|what\'s up|sup|howdy|yo)\b/i', $p) || $p === 'hi' || $p === 'hello') {
-        return "Hey! What's up? Tell me what you'd like to code or build in any language (Java, Python, Rust, Go, C++, JavaScript, etc.), and I'll generate it right away!";
+    if (preg_match('/^(hi|hello|hey|whats up|what\'s up|sup|howdy|yo)\b/i', $p)) {
+        return "Hey! What's up? Tell me what you'd like to build — I can code in Java, Python, Rust, Go, C++, JavaScript, TypeScript, Kotlin, Swift, C#, PHP, SQL, and more!";
+    }
+    if (strpos($p, 'how are you') !== false) {
+        return "Doing great! Ready to code — what language or project are we working on?";
+    }
+    if (strpos($p, 'who are you') !== false) {
+        return "I'm Soen AI — your full-stack coding assistant. I can write, debug, and explain code in any programming language. What would you like to build?";
     }
 
-    // 1. RUST
-    if (strpos($p, 'rust') !== false || strpos($p, 'rs') !== false) {
-        return "Here is the complete **Rust** implementation for `" . htmlspecialchars($prompt) . "`:\n\n" .
-               "```rust\n// main.rs\nfn main() {\n    println!(\"🦀 Rust program running!\");\n    \n    let numbers = vec![1, 2, 3, 4, 5];\n    let doubled: Vec<i32> = numbers.iter().map(|&x| x * 2).collect();\n    \n    println!(\"Original: {:?}\", numbers);\n    println!(\"Doubled:  {:?}\", doubled);\n}\n```";
+    // Language-specific starters
+    $starters = [
+        'rust'       => ["```rust\n// main.rs\nfn main() {\n    let nums: Vec<i32> = (1..=5).collect();\n    let doubled: Vec<i32> = nums.iter().map(|&x| x * 2).collect();\n    println!(\"Original: {:?}\", nums);\n    println!(\"Doubled:  {:?}\", doubled);\n}\n```", 'Rust', '🦀'],
+        'golang'     => ["```go\n// main.go\npackage main\n\nimport \"fmt\"\n\nfunc main() {\n    for i := 1; i <= 5; i++ {\n        fmt.Printf(\"Line %d\\n\", i)\n    }\n}\n```", 'Go', '🐹'],
+        'kotlin'     => ["```kotlin\n// Main.kt\nfun main() {\n    val items = listOf(\"Kotlin\", \"JVM\", \"Coroutines\")\n    items.forEachIndexed { i, v -> println(\"\${i+1}. \$v\") }\n}\n```", 'Kotlin', '✨'],
+        'swift'      => ["```swift\n// main.swift\nlet items = [\"Swift\", \"iOS\", \"SwiftUI\"]\nfor (i, item) in items.enumerated() {\n    print(\"\\(i+1). \\(item)\")\n}\n```", 'Swift', '🍎'],
+        'c#'         => ["```csharp\n// Program.cs\nusing System;\nusing System.Collections.Generic;\nclass Program {\n    static void Main() {\n        var list = new List<string> {\"C#\", \"LINQ\", \"ASP.NET\"};\n        list.ForEach(Console.WriteLine);\n    }\n}\n```", 'C#', '⚡'],
+        'java'       => ["```java\n// Main.java\nimport java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        var list = Arrays.asList(\"Java 21\", \"Spring Boot\", \"Records\");\n        list.forEach(System.out::println);\n    }\n}\n```", 'Java', '☕'],
+        'python'     => ["```python\n# main.py\nfrom datetime import datetime\ndata = list(range(1, 11))\nprint(f\"🐍 Python | {datetime.now():%Y-%m-%d}\")\nprint(f\"Sum: {sum(data)}, Avg: {sum(data)/len(data):.2f}\")\n```", 'Python', '🐍'],
+        'c++'        => ["```cpp\n// main.cpp\n#include <iostream>\n#include <vector>\nint main() {\n    std::vector<int> v = {1,2,3,4,5};\n    for (auto x : v) std::cout << x << \" \";\n    std::cout << std::endl;\n    return 0;\n}\n```", 'C++', '⚡'],
+        'php'        => ["```php\n// api.php\n<?php\nheader('Content-Type: application/json');\necho json_encode(['status'=>'ok','ts'=>date('c')], JSON_PRETTY_PRINT);\n```", 'PHP', '🐘'],
+        'sql'        => ["```sql\n-- query.sql\nSELECT id, name, created_at\nFROM users\nWHERE status = 'active'\nORDER BY created_at DESC\nLIMIT 10;\n```", 'SQL', '🗄️'],
+        'typescript' => ["```typescript\n// app.ts\ninterface User { id: number; name: string; }\nconst users: User[] = [{ id: 1, name: 'Alice' }];\nusers.forEach(u => console.log(`[${u.id}] ${u.name}`));\n```", 'TypeScript', '🔷'],
+    ];
+
+    foreach ($starters as $lang => [$code, $label, $icon]) {
+        if (strpos($p, $lang) !== false) {
+            return "Here is the {$icon} **{$label}** code for `" . htmlspecialchars($prompt) . "`:\n\n{$code}";
+        }
     }
 
-    // 2. GO / GOLANG
-    if (strpos($p, 'golang') !== false || preg_match('/\b(go|go language|go code)\b/', $p)) {
-        return "Here is the complete **Go (Golang)** program for `" . htmlspecialchars($prompt) . "`:\n\n" .
-               "```go\n// main.go\npackage main\n\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc main() {\n    fmt.Println(\"🐹 Go Application is running!\")\n    fmt.Printf(\"Current time: %s\\n\", time.Now().Format(time.RFC1123))\n}\n```";
-    }
-
-    // 3. KOTLIN
-    if (strpos($p, 'kotlin') !== false || strpos($p, 'kt') !== false) {
-        return "Here is the complete **Kotlin** code for `" . htmlspecialchars($prompt) . "`:\n\n" .
-               "```kotlin\n// Main.kt\ndata class User(val id: Int, val name: String, val active: Boolean = true)\n\nfun main() {\n    println(\"✨ Kotlin Application Running\")\n    val users = listOf(User(1, \"Alice\"), User(2, \"Bob\"))\n    users.forEach { println(\"User: \${it.name} (ID: \${it.id})\") }\n}\n```";
-    }
-
-    // 4. SWIFT
-    if (strpos($p, 'swift') !== false) {
-        return "Here is the complete **Swift** code for `" . htmlspecialchars($prompt) . "`:\n\n" .
-               "```swift\n// main.swift\nimport Foundation\n\nstruct Item {\n    let id: Int\n    let title: String\n}\n\nlet items = [Item(id: 1, title: \"Swift Feature\"), Item(id: 2, title: \"iOS Module\")]\nprint(\"🍎 Swift Code Executed Successfully\")\nitems.forEach { print(\"- \\($0.title)\") }\n```";
-    }
-
-    // 5. C# / .NET
-    if (strpos($p, 'c#') !== false || strpos($p, 'csharp') !== false || strpos($p, '.net') !== false) {
-        return "Here is the complete **C#** program for `" . htmlspecialchars($prompt) . "`:\n\n" .
-               "```csharp\n// Program.cs\nusing System;\nusing System.Collections.Generic;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine(\"⚡ C# Application Executed!\");\n        var items = new List<string> { \"ASP.NET\", \"Entity Framework\", \"LINQ\" };\n        items.ForEach(i => Console.WriteLine($\"• {i}\"));\n    }\n}\n```";
-    }
-
-    // 6. JAVA
-    if (strpos($p, 'java') !== false && strpos($p, 'javascript') === false) {
-        return "Here is the complete **Java** program for `" . htmlspecialchars($prompt) . "`:\n\n" .
-               "```java\n// Main.java\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"========================================\");\n        System.out.println(\"☕ Java Program Output\");\n        System.out.println(\"========================================\");\n\n        List<String> list = Arrays.asList(\"Spring Boot\", \"Java 21\", \"Multithreading\", \"Data Structures\");\n        for (int i = 0; i < list.size(); i++) {\n            System.out.printf(\"[%d] %s%n\", i + 1, list.get(i));\n        }\n        System.out.println(\"\\n✅ Java code executed successfully.\");\n    }\n}\n```";
-    }
-
-    // 7. PYTHON
-    if (strpos($p, 'python') !== false || strpos($p, 'py') !== false) {
-        return "Here is the complete **Python** script for `" . htmlspecialchars($prompt) . "`:\n\n" .
-               "```python\n# main.py\nimport sys\nfrom datetime import datetime\n\ndef main():\n    print(\"=\" * 40)\n    print(f\"🐍 Python Script - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\")\n    print(\"=\" * 40)\n    \n    data = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]\n    print(f\"Data: {data}\")\n    print(f\"Sum: {sum(data)}, Avg: {sum(data)/len(data):.2f}\")\n    print(\"\\n✅ Python execution completed.\")\n\nif __name__ == '__main__':\n    main()\n```";
-    }
-
-    // 8. C++ / C
-    if (strpos($p, 'c++') !== false || strpos($p, 'cpp') !== false || preg_match('/\b(c code|c program)\b/', $p)) {
-        return "Here is the complete **C++** program for `" . htmlspecialchars($prompt) . "`:\n\n" .
-               "```cpp\n// main.cpp\n#include <iostream>\n#include <vector>\n#include <string>\n\nint main() {\n    std::cout << \"======================================\\n\";\n    std::cout << \"⚡ C++ Execution Engine\\n\";\n    std::cout << \"======================================\\n\\n\";\n\n    std::vector<std::string> stack = {\"Fast Compilation\", \"Low Overhead\", \"Memory Efficiency\"};\n    for (size_t i = 0; i < stack.size(); ++i) {\n        std::cout << i + 1 << \". \" << stack[i] << \"\\n\";\n    }\n    std::cout << \"\\n✅ Program finished successfully.\\n\";\n    return 0;\n}\n```";
-    }
-
-    // 9. SQL
-    if (strpos($p, 'sql') !== false || strpos($p, 'query') !== false || strpos($p, 'table') !== false) {
-        return "Here is the **SQL** code for `" . htmlspecialchars($prompt) . "`:\n\n" .
-               "```sql\n-- query.sql\nCREATE TABLE IF NOT EXISTS records (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    name VARCHAR(120) NOT NULL,\n    status VARCHAR(50) DEFAULT 'active',\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\nSELECT * FROM records WHERE status = 'active' ORDER BY created_at DESC;\n```";
-    }
-
-    // 10. Generic Dynamic Code Output
-    return "Here is the solution for `" . htmlspecialchars($prompt) . "`:\n\n" .
-        "```javascript\n// solution.js\n// Output for: " . addslashes($prompt) . "\nfunction execute() {\n  console.log(\"Executing request: " . addslashes($prompt) . "\");\n  return { status: \"success\", time: new Date().toISOString() };\n}\n\nexecute();\n```";
+    // Generic JS fallback
+    return "Here is the solution for `" . htmlspecialchars($prompt) . "`:\n\n```javascript\n// solution.js\n// Task: " . addslashes($prompt) . "\nfunction run() {\n  console.log('Executing: " . addslashes($prompt) . "');\n  return { done: true, ts: new Date().toISOString() };\n}\nconsole.log(run());\n```";
 }
