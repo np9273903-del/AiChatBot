@@ -27,11 +27,11 @@ function generate_ai_result($prompt) {
         if ($openAiReply) return $openAiReply;
     }
 
-    // 3. Free Live Cloud AI Backend A (Pollinations OpenAI Endpoint)
+    // 3. Free Live Cloud AI Backend A (Fast POST JSON)
     $liveA = generate_with_live_cloud_a($prompt);
     if ($liveA) return $liveA;
 
-    // 4. Free Live Cloud AI Backend B (Pollinations Unified Endpoint)
+    // 4. Free Live Cloud AI Backend B (GET Query)
     $liveB = generate_with_live_cloud_b($prompt);
     if ($liveB) return $liveB;
 
@@ -73,7 +73,7 @@ function generate_with_live_cloud_a($prompt) {
             'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
         ],
         CURLOPT_POSTFIELDS => json_encode($payload),
-        CURLOPT_TIMEOUT => 20,
+        CURLOPT_TIMEOUT => 8,
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_SSL_VERIFYHOST => false,
@@ -99,7 +99,7 @@ function generate_with_live_cloud_b($prompt) {
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT => 20,
+        CURLOPT_TIMEOUT => 8,
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HTTPHEADER => [
             'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
@@ -147,7 +147,7 @@ function generate_with_gemini($prompt) {
         CURLOPT_POST => true,
         CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
         CURLOPT_POSTFIELDS => json_encode($payload),
-        CURLOPT_TIMEOUT => 25,
+        CURLOPT_TIMEOUT => 12,
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_SSL_VERIFYHOST => false,
@@ -192,7 +192,7 @@ function generate_with_openai($prompt) {
             'Authorization: Bearer ' . $apiKey,
         ],
         CURLOPT_POSTFIELDS => json_encode($payload),
-        CURLOPT_TIMEOUT => 25,
+        CURLOPT_TIMEOUT => 12,
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_SSL_VERIFYHOST => false,
