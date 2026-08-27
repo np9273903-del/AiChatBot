@@ -56,6 +56,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // 🌟 Exact Jitter Toggle Switch Interaction
+    const aiModeSwitch = document.getElementById('aiModeSwitch');
+    const lblFast = document.getElementById('lblFast');
+    const lblPro = document.getElementById('lblPro');
+
+    if (aiModeSwitch) {
+        function syncToggleLabels() {
+            if (aiModeSwitch.checked) {
+                if (lblFast) lblFast.classList.remove('active');
+                if (lblPro) lblPro.classList.add('active');
+            } else {
+                if (lblFast) lblFast.classList.add('active');
+                if (lblPro) lblPro.classList.remove('active');
+            }
+        }
+        aiModeSwitch.addEventListener('change', syncToggleLabels);
+        if (lblFast) lblFast.addEventListener('click', () => { aiModeSwitch.checked = false; syncToggleLabels(); });
+        if (lblPro)  lblPro.addEventListener('click',  () => { aiModeSwitch.checked = true;  syncToggleLabels(); });
+        syncToggleLabels();
+    }
+
     async function loadProjects() {
         if (!projectGrid) return;
         try {

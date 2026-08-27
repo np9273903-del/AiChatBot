@@ -58,17 +58,33 @@ $user = require_auth_page();
 <div class="container dashboard-container jitter-main-content">
     <div class="dashboard-hero-banner">
         <div class="hero-text-content">
-            <div class="jitter-badge">
-                <span class="pulse-dot"></span>
-                <span>Gemini 3.0 Live AI Active</span>
+            <div class="hero-top-row">
+                <div class="jitter-badge">
+                    <span class="pulse-dot"></span>
+                    <span>Gemini 3.0 Live AI Active</span>
+                </div>
+
+                <!-- 🌟 EXACT JITTER PURPLE TOGGLE BUTTON -->
+                <div class="jitter-toggle-widget" title="Toggle AI Engine Mode">
+                    <span class="toggle-label left-lbl active" id="lblFast">Fast</span>
+                    <label class="jitter-switch-exact">
+                        <input type="checkbox" id="aiModeSwitch" checked>
+                        <span class="jitter-switch-track">
+                            <span class="jitter-switch-thumb"></span>
+                        </span>
+                    </label>
+                    <span class="toggle-label right-lbl" id="lblPro">Pro ⚡</span>
+                </div>
             </div>
+
             <h1 class="hero-title">Welcome back, <span class="highlight-name"><?= htmlspecialchars($user['username']) ?></span></h1>
             <p class="section-subtitle">Collaborate in real-time, generate full-stack code with AI, and launch workspaces instantly.</p>
         </div>
-        <button class="btn btn-primary btn-new-proj jitter-cta-btn" id="openNewProjectBtn">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            <span>New AI Project</span>
-            <span class="btn-shimmer"></span>
+
+        <!-- 🌟 CLEAN JITTER BUTTON WITH SMOOTH HOVER -->
+        <button class="jitter-btn-primary" id="openNewProjectBtn">
+            <span class="btn-icon-plus">+</span>
+            <span class="btn-label">New AI Project</span>
         </button>
     </div>
 
@@ -81,7 +97,7 @@ $user = require_auth_page();
             <div class="new-proj-text">Create New Project</div>
             <div class="new-proj-sub">Start with AI assistance</div>
         </div>
-        <!-- Project cards injected dynamically with staggered entrance animation -->
+        <!-- Project cards injected dynamically -->
     </div>
 </div>
 
@@ -100,9 +116,8 @@ $user = require_auth_page();
         </div>
         <div class="modal-actions">
             <button class="btn secondary" id="cancelModal">Cancel</button>
-            <button class="btn btn-primary jitter-cta-btn" id="createProjectBtn">
+            <button class="jitter-btn-primary modal-create-btn" id="createProjectBtn">
                 <span>Create Workspace</span>
-                <span class="btn-shimmer"></span>
             </button>
         </div>
     </div>
