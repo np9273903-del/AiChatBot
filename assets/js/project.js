@@ -680,11 +680,16 @@ ${jsArt ? `<script>${jsArt.code}</script>` : ''}
         const bubbleCol = document.createElement('div');
         bubbleCol.className = 'msg-col';
 
-        // Sender label above the bubble (Matches Soen Video)
+        // Sender label above the bubble (Refined visual hierarchy)
         const meta = document.createElement('div');
         meta.className = 'msg-meta';
-        const senderLabel = isAi ? 'AI' : (row.sender_label || (isMine ? (myUsername || myUserEmail || 'You') : 'User'));
-        meta.innerHTML = `<span class="sender-name">${escapeHtml(senderLabel)}</span>`;
+        if (isAi) {
+            meta.innerHTML = `<span class="ai-badge-label">✦ Soen AI</span>`;
+        } else if (isMine) {
+            meta.innerHTML = `<span class="user-badge-label">${escapeHtml(myUsername || myUserEmail || 'You')}</span>`;
+        } else {
+            meta.innerHTML = `<span class="team-badge-label">${escapeHtml(row.sender_label || 'Teammate')}</span>`;
+        }
         bubbleCol.appendChild(meta);
 
         const bubble = document.createElement('div');
