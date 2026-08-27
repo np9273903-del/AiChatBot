@@ -596,12 +596,15 @@ ${jsArt ? `<script>${jsArt.code}</script>` : ''}
     function openStudio() {
         if (!codeStudio) return;
         codeStudio.classList.remove('collapsed');
+        if (projectScreen) projectScreen.classList.remove('studio-closed');
         if (toggleStudioBtn) toggleStudioBtn.classList.add('active');
+        setTimeout(() => updateGutter(), 400);
     }
 
     function closeStudio() {
         if (!codeStudio) return;
         codeStudio.classList.add('collapsed');
+        if (projectScreen) projectScreen.classList.add('studio-closed');
         if (toggleStudioBtn) toggleStudioBtn.classList.remove('active');
     }
 
