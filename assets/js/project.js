@@ -922,8 +922,9 @@ ${jsArt ? `<script>${jsArt.code}</script>` : ''}
             if (isAiQuery) {
                 if (aiTypingIndicator) aiTypingIndicator.classList.remove('show');
                 if (data && data.ai_reply) {
+                    const aiMsgId = data.ai_id || tempIdCounter--;
                     renderMessage({
-                        id: tempIdCounter--,
+                        id: aiMsgId,
                         user_id: null,
                         sender_label: 'AI',
                         message: data.ai_reply,

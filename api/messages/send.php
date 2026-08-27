@@ -84,10 +84,11 @@ if (stripos($message, '@ai') !== false) {
 
     $aiReply = generate_ai_result($prompt, $history);
 
-    $stmt = $conn->prepare('INSERT INTO messages (project_id, user_id, sender_label, message, is_ai) VALUES (?, NULL, "AI", ?, 1)');
-    $stmt->bind_param('is', $projectId, $aiReply);
+    $stmt = $conn->prepare('INSERT INTO messages (project_id, user_id, client_id, sender_label, message, is_ai) VALUES (?, NULL, ?, "AI", ?, 1)');
+    $stmt->bind_param('iss', $projectId, $clientId, $aiReply);
     $stmt->execute();
+    $aiId = $conn->insert_id;
     $stmt->close();
 }
 
-echo json_encode(['success' => true, 'ai_reply' => $aiReply]);
+echo json_encode(['success' => true, 'ai_reply' => $aiReply, 'ai_id' => $aiId ?? null]);
