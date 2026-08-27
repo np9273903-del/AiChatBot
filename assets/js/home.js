@@ -17,6 +17,45 @@ document.addEventListener('DOMContentLoaded', () => {
         return div.innerHTML;
     }
 
+    // 🌟 Jitter Navigation Slider Indicator
+    const navMenu = document.getElementById('jitterNavMenu');
+    const navIndicator = document.getElementById('navIndicator');
+    const navItems = document.querySelectorAll('.jitter-nav-item');
+
+    function updateNavIndicator(element) {
+        if (!element || !navIndicator || !navMenu) return;
+        const menuRect = navMenu.getBoundingClientRect();
+        const itemRect = element.getBoundingClientRect();
+
+        const offsetLeft = itemRect.left - menuRect.left;
+        const width = itemRect.width;
+
+        navIndicator.style.opacity = '1';
+        navIndicator.style.transform = `translateX(${offsetLeft}px)`;
+        navIndicator.style.width = `${width}px`;
+    }
+
+    if (navItems.length > 0) {
+        const activeItem = document.querySelector('.jitter-nav-item.active') || navItems[0];
+        setTimeout(() => updateNavIndicator(activeItem), 50);
+
+        navItems.forEach(item => {
+            item.addEventListener('mouseenter', () => updateNavIndicator(item));
+            item.addEventListener('click', () => {
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                updateNavIndicator(item);
+            });
+        });
+
+        if (navMenu) {
+            navMenu.addEventListener('mouseleave', () => {
+                const currentActive = document.querySelector('.jitter-nav-item.active') || navItems[0];
+                if (currentActive) updateNavIndicator(currentActive);
+            });
+        }
+    }
+
     async function loadProjects() {
         if (!projectGrid) return;
         try {
@@ -28,9 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
             [...projectGrid.querySelectorAll('.project-card')].forEach(el => el.remove());
 
             if (data.projects && data.projects.length > 0) {
-                data.projects.forEach(p => {
+                data.projects.forEach((p, idx) => {
                     const card = document.createElement('div');
-                    card.className = 'project-card';
+                    card.className = 'project-card jitter-card-in';
+                    card.style.animationDelay = `${idx * 0.07}s`;
                     card.innerHTML = `
                         <div class="project-card-header">
                             <div class="project-icon-box">⚡</div>
@@ -38,8 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <h3 class="project-title">${escapeHtml(p.name)}</h3>
                         <div class="project-meta-bottom">
-                            <span class="meta-status">✦ AI Ready</span>
-                            <span class="open-arrow">Open Workspace →</span>
+                            <span class="meta-status">✦ AI Workspace Ready</span>
+                            <span class="open-arrow">Open →</span>
                         </div>
                     `;
                     card.addEventListener('click', () => {
