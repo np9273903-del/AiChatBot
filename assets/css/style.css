@@ -850,6 +850,74 @@ body.workspace-body {
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
 }
 
+/* VOICE RECORDING BAR (Hidden by default, dark glassmorphic when active) */
+.recording-bar {
+    display: none !important;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background: rgba(239, 68, 68, 0.12);
+    border-top: 1px solid rgba(239, 68, 68, 0.25);
+    color: #f87171;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.recording-bar.show {
+    display: flex !important;
+}
+
+.rec-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rec-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ef4444;
+    box-shadow: 0 0 8px #ef4444;
+    animation: pulseMic 1s infinite alternate;
+}
+
+@keyframes pulseMic {
+    0%   { opacity: 0.4; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1.1); }
+}
+
+.rec-timer {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: #fca5a5;
+}
+
+.rec-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.rec-actions .btn {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.rec-actions .btn.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #f8fafc;
+}
+
+.rec-actions .btn-primary {
+    background: #ef4444;
+    border: none;
+    color: #ffffff;
+}
+
 /* 7. MODERN GLASS COMPOSER AREA */
 .composer-container {
     padding: 10px 14px 12px;
