@@ -1559,32 +1559,64 @@ body.pane-resizing { cursor: col-resize; user-select: none; }
 }
 
 .jitter-user-section {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding-left: 10px;
+    padding-left: 12px;
     border-left: 1px solid rgba(255, 255, 255, 0.12);
+    flex-shrink: 0;
 }
 
 .jitter-chip {
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #f8fafc;
-    padding: 4px 10px 4px 5px;
-    border-radius: 9999px;
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    padding: 3px 12px 3px 4px !important;
+    border-radius: 9999px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+}
+
+.jitter-chip .avatar {
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #38bdf8 0%, #a855f7 100%) !important;
+    color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 800 !important;
+    font-size: 11.5px !important;
+    flex-shrink: 0 !important;
+    margin: 0 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.jitter-chip .user-name {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
+    display: inline-block !important;
 }
 
 .btn-jitter-logout {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background: rgba(239, 68, 68, 0.12);
     border: 1px solid rgba(239, 68, 68, 0.25);
     color: #f87171;
     cursor: pointer;
+    flex-shrink: 0;
     transition: background 0.2s, transform 0.2s;
 }
 
