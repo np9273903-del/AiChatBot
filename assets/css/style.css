@@ -226,6 +226,7 @@ body.auth-video-body {
 .forgot-link:hover { color: #FFFFFF; text-decoration: underline; }
 
 /* ---------- SHARED AUTH INPUT — TRANSPARENT GLASS ---------- */
+/* appearance:none kills browser default white bg on all browsers */
 .field input,
 .field select,
 .field textarea,
@@ -234,17 +235,19 @@ body.auth-video-body {
     height: 46px;
     padding: 0 14px;
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    background: rgba(255, 255, 255, 0.12);
-    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.10) !important;
+    color: #FFFFFF !important;
     font-size: 14px;
     font-weight: 400;
     font-family: inherit;
     line-height: 1;
+    caret-color: #FFFFFF;
+    -webkit-appearance: none;
+    appearance: none;
     transition:
         border-color  0.2s ease-in-out,
-        box-shadow    0.2s ease-in-out,
-        background    0.2s ease-in-out;
+        box-shadow    0.2s ease-in-out;
 }
 
 /* textarea auto height */
@@ -254,34 +257,52 @@ body.auth-video-body {
     line-height: 1.5;
 }
 
-/* ✅ Placeholder — always dimmed white, never pre-filled looking */
+/* ✅ Placeholder — dimmed white, never pre-filled looking */
 .field input::placeholder,
 .field select::placeholder,
 .field textarea::placeholder,
 .auth-input::placeholder {
-    color: rgba(255, 255, 255, 0.40) !important;
+    color: rgba(255, 255, 255, 0.38) !important;
     font-weight: 400 !important;
     opacity: 1 !important;
     font-style: normal !important;
+}
+
+/* ✅ FIX: Override browser autofill white background using inset box-shadow trick */
+/* Chrome/Safari fill a white bg that can't be removed any other way */
+.field input:-webkit-autofill,
+.field input:-webkit-autofill:hover,
+.field input:-webkit-autofill:focus,
+.field input:-webkit-autofill:active,
+.auth-input:-webkit-autofill,
+.auth-input:-webkit-autofill:hover,
+.auth-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px rgba(29, 48, 80, 0.55) inset !important;
+    box-shadow: 0 0 0 1000px rgba(29, 48, 80, 0.55) inset !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    caret-color: #FFFFFF !important;
+    border-color: rgba(255, 255, 255, 0.28) !important;
+    /* Delay the autofill animation so it doesn't flash white */
+    transition: background-color 9999s ease-in-out 0s !important;
 }
 
 /* Hover state */
 .field input:hover:not(:focus),
 .field textarea:hover:not(:focus),
 .auth-input:hover:not(:focus) {
-    border-color: rgba(255, 255, 255, 0.40);
-    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.16) !important;
 }
 
-/* Focus state — blue border + white glow */
+/* Focus state — blue border + soft blue glow, stays transparent */
 .field input:focus,
 .field select:focus,
 .field textarea:focus,
 .auth-input:focus {
     outline: none;
     border-color: #60a5fa;
-    background: rgba(255, 255, 255, 0.20);
-    box-shadow: 0 0 0 3.5px rgba(96, 165, 250, 0.30);
+    background: rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 0 0 3.5px rgba(96, 165, 250, 0.28);
 }
 
 /* ---------- PASSWORD SHOW/HIDE BUTTON (forgot-password form) ---------- */
