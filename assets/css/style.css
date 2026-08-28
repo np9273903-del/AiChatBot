@@ -161,14 +161,15 @@ body.auth-video-body {
     width: 38px;
     height: 38px;
     border-radius: 9px;
-    background: #1D4ED8;
+    background: #111111;
     color: #FFFFFF;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 18px;
     font-weight: 800;
-    box-shadow: 0 4px 14px rgba(29, 78, 216, 0.5);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     flex-shrink: 0;
 }
 
@@ -197,11 +198,10 @@ body.auth-video-body {
     font-weight: 400;
 }
 
-/* ---------- FIELD LABELS (AUTH PAGES) ---------- */
-.auth-card .field { margin-bottom: 16px; }
+/* ---------- FIELD LABELS ---------- */
+.field { margin-bottom: 16px; }
 
-body.auth-body .field label,
-.auth-card .field label {
+.field label {
     display: block;
     font-size: 12.5px;
     font-weight: 600;
@@ -210,13 +210,13 @@ body.auth-body .field label,
     letter-spacing: 0.01em;
 }
 
-.auth-card .field-label-row {
+.field-label-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 6px;
 }
-.auth-card .field-label-row label { margin-bottom: 0; }
+.field-label-row label { margin-bottom: 0; }
 
 .forgot-link {
     font-size: 12px;
@@ -226,14 +226,11 @@ body.auth-body .field label,
 }
 .forgot-link:hover { color: #93C5FD; text-decoration: underline; }
 
-/* ---------- SHARED AUTH INPUT — TRANSPARENT GLASS (AUTH ONLY) ---------- */
+/* ---------- SHARED AUTH INPUT — TRANSPARENT GLASS ---------- */
 /* appearance:none kills browser default white bg on all browsers */
-body.auth-body .field input,
-body.auth-body .field select,
-body.auth-body .field textarea,
-.auth-card .field input,
-.auth-card .field select,
-.auth-card .field textarea,
+.field input,
+.field select,
+.field textarea,
 .auth-input {
     width: 100%;
     height: 46px;
@@ -255,21 +252,16 @@ body.auth-body .field textarea,
 }
 
 /* textarea auto height */
-body.auth-body .field textarea,
-.auth-card .field textarea,
-textarea.auth-input {
+.field textarea, textarea.auth-input {
     height: auto;
     padding: 12px 14px;
     line-height: 1.5;
 }
 
 /* ✅ Placeholder — dimmed white, never pre-filled looking */
-body.auth-body .field input::placeholder,
-body.auth-body .field select::placeholder,
-body.auth-body .field textarea::placeholder,
-.auth-card .field input::placeholder,
-.auth-card .field select::placeholder,
-.auth-card .field textarea::placeholder,
+.field input::placeholder,
+.field select::placeholder,
+.field textarea::placeholder,
 .auth-input::placeholder {
     color: rgba(255, 255, 255, 0.38) !important;
     font-weight: 400 !important;
@@ -278,14 +270,11 @@ body.auth-body .field textarea::placeholder,
 }
 
 /* ✅ FIX: Override browser autofill white background using inset box-shadow trick */
-body.auth-body .field input:-webkit-autofill,
-body.auth-body .field input:-webkit-autofill:hover,
-body.auth-body .field input:-webkit-autofill:focus,
-body.auth-body .field input:-webkit-autofill:active,
-.auth-card .field input:-webkit-autofill,
-.auth-card .field input:-webkit-autofill:hover,
-.auth-card .field input:-webkit-autofill:focus,
-.auth-card .field input:-webkit-autofill:active,
+/* Chrome/Safari fill a white bg that can't be removed any other way */
+.field input:-webkit-autofill,
+.field input:-webkit-autofill:hover,
+.field input:-webkit-autofill:focus,
+.field input:-webkit-autofill:active,
 .auth-input:-webkit-autofill,
 .auth-input:-webkit-autofill:hover,
 .auth-input:-webkit-autofill:focus {
@@ -294,25 +283,21 @@ body.auth-body .field input:-webkit-autofill:active,
     -webkit-text-fill-color: #FFFFFF !important;
     caret-color: #FFFFFF !important;
     border: none !important;
+    /* Delay the autofill animation so it doesn't flash white */
     transition: background-color 9999s ease-in-out 0s !important;
 }
 
 /* Hover state */
-body.auth-body .field input:hover:not(:focus),
-body.auth-body .field textarea:hover:not(:focus),
-.auth-card .field input:hover:not(:focus),
-.auth-card .field textarea:hover:not(:focus),
+.field input:hover:not(:focus),
+.field textarea:hover:not(:focus),
 .auth-input:hover:not(:focus) {
     background: rgba(255, 255, 255, 0.18) !important;
 }
 
 /* Focus state — subtle glow ring, borderless transparent */
-body.auth-body .field input:focus,
-body.auth-body .field select:focus,
-body.auth-body .field textarea:focus,
-.auth-card .field input:focus,
-.auth-card .field select:focus,
-.auth-card .field textarea:focus,
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
 .auth-input:focus {
     outline: none;
     border: none !important;
@@ -782,8 +767,8 @@ body.workspace-body {
 }
 
 .header-actions .btn.secondary {
-    background: #1D4ED8;
-    border: none;
+    background: #111111;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     color: #FFFFFF !important;
     font-weight: 600;
     padding: 6px 12px;
@@ -791,23 +776,24 @@ body.workspace-body {
     transition: background-color 0.15s, transform 0.15s;
 }
 .header-actions .btn.secondary:hover {
-    background: #1e40af;
+    background: #262626;
     transform: translateY(-1px);
 }
 
 .studio-toggle-btn {
-    background: #1D4ED8 !important;
+    background: #111111 !important;
     color: #FFFFFF !important;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     font-weight: 600;
     padding: 6px 14px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(29, 78, 216, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
 }
 .studio-toggle-btn:hover {
+    background: #262626 !important;
     transform: translateY(-1px) scale(1.03);
-    box-shadow: 0 4px 14px rgba(29, 78, 216, 0.45);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
 }
 
 /* 3. CHAT MESSAGES FEED (WARM OFF-WHITE BACKGROUND) */
@@ -1032,7 +1018,7 @@ body.workspace-body {
 }
 
 .artifact-btn:hover { background: #333333; transform: translateY(-1px); }
-.artifact-btn.btn-preview-open { background: #1D4ED8 !important; border-color: #1D4ED8; color: #FFFFFF !important; }
+.artifact-btn.btn-preview-open { background: #111111 !important; border-color: #111111; color: #FFFFFF !important; }
 .artifact-btn.btn-code-run { background: #F43F5E !important; border-color: #F43F5E; color: #FFFFFF !important; }
 
 /* 5. AI TYPING INDICATOR */
@@ -1045,7 +1031,7 @@ body.workspace-body {
     backdrop-filter: blur(12px);
     border-top: 1px solid rgba(17, 17, 17, 0.08);
     font-size: 12px;
-    color: #1D4ED8;
+    color: #111111;
     font-weight: 600;
     animation: typingBarSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -1056,7 +1042,7 @@ body.workspace-body {
 }
 
 .ai-typing-indicator.show { display: flex; }
-.ai-typing-avatar { font-size: 14px; color: #1D4ED8; }
+.ai-typing-avatar { font-size: 14px; color: #111111; }
 .ai-typing-content { display: flex; align-items: center; gap: 8px; }
 
 .ai-typing-dots { display: flex; gap: 3px; }
@@ -1064,7 +1050,7 @@ body.workspace-body {
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: #1D4ED8;
+    background: #111111;
     animation: dotBounce 1.2s infinite ease-in-out;
 }
 .ai-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
@@ -1104,11 +1090,11 @@ body.workspace-body {
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .quick-chip:hover {
-    background: #1D4ED8;
+    background: #111111;
     color: #FFFFFF;
-    border-color: #1D4ED8;
+    border-color: #111111;
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(29, 78, 216, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* 7. MODERN GLASS COMPOSER AREA */
@@ -1393,10 +1379,11 @@ body.workspace-body {
 
 /* 🌟 CLEAR ACTIVE TAB STATE (#1D4ED8 BLUE) */
 .studio-tab-btn.active {
-    background: #1D4ED8;
+    background: #111111;
     color: #FFFFFF;
     font-weight: 700;
-    box-shadow: 0 2px 6px rgba(29, 78, 216, 0.35);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .tab-badge-dot {
@@ -1413,9 +1400,9 @@ body.workspace-body {
 }
 
 .btn-zip {
-    background: #1D4ED8;
+    background: #111111;
     color: #FFFFFF !important;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     font-weight: 600;
     display: inline-flex;
     align-items: center;
@@ -1424,10 +1411,10 @@ body.workspace-body {
     border-radius: 6px;
     cursor: pointer;
     font-size: 12px;
-    box-shadow: 0 2px 6px rgba(29, 78, 216, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
     transition: background-color 0.15s, transform 0.15s;
 }
-.btn-zip:hover { background: #1e40af; transform: translateY(-1px); }
+.btn-zip:hover { background: #262626; transform: translateY(-1px); }
 
 .studio-action-icon {
     background: transparent;
@@ -1626,7 +1613,7 @@ body.workspace-body {
     cursor: pointer;
     font-weight: 500;
 }
-.viewport-btn.active { background: #1D4ED8; color: #FFFFFF; }
+.viewport-btn.active { background: #111111; color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2); }
 
 .preview-frame-wrapper {
     flex: 1;
@@ -1969,10 +1956,11 @@ body.workspace-body {
     bottom: 2px;
     left: 0;
     width: 0;
-    background: #1D4ED8;
+    background: #111111;
     border-radius: 9999px;
     pointer-events: none;
-    box-shadow: 0 2px 8px rgba(29, 78, 216, 0.4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), width 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease;
     opacity: 0;
 }
@@ -2028,7 +2016,7 @@ body.workspace-body {
     width: 24px !important;
     height: 24px !important;
     border-radius: 50% !important;
-    background: #1D4ED8 !important;
+    background: #111111 !important;
     color: #FFFFFF !important;
     display: flex !important;
     align-items: center !important;
@@ -2037,6 +2025,7 @@ body.workspace-body {
     font-size: 11.5px !important;
     flex-shrink: 0 !important;
     margin: 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
@@ -2151,17 +2140,17 @@ body.workspace-body {
 }
 
 .toggle-label.left-lbl.active {
-    background: #1D4ED8 !important;
+    background: #111111 !important;
     color: #FFFFFF !important;
     font-weight: 700;
-    box-shadow: 0 2px 8px rgba(29, 78, 216, 0.4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .toggle-label.right-lbl.active {
     background: #111111 !important;
     color: #FFFFFF !important;
     font-weight: 700;
-    box-shadow: 0 2px 8px rgba(17, 17, 17, 0.4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .jitter-switch-exact {
@@ -2208,8 +2197,8 @@ body.workspace-body {
 
 /* PRO / CHECKED STATE */
 .jitter-switch-exact input:checked + .jitter-switch-track {
-    background: #1D4ED8;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 12px rgba(29, 78, 216, 0.45);
+    background: #111111;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 12px rgba(0, 0, 0, 0.45);
 }
 
 .jitter-switch-exact input:checked + .jitter-switch-track .jitter-switch-thumb {
@@ -2301,19 +2290,19 @@ body.workspace-body {
     width: 36px;
     height: 36px;
     border-radius: 10px;
-    background: #1D4ED8;
+    background: #111111;
     color: #FFFFFF;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 18px;
-    box-shadow: 0 2px 8px rgba(29, 78, 216, 0.25);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 .project-card .project-member-badge {
-    background: rgba(29, 78, 216, 0.1) !important;
-    border: 1px solid rgba(29, 78, 216, 0.2) !important;
-    color: #1D4ED8 !important;
+    background: rgba(17, 17, 17, 0.08) !important;
+    border: 1px solid rgba(17, 17, 17, 0.15) !important;
+    color: #111111 !important;
     font-size: 11.5px !important;
     font-weight: 700 !important;
     padding: 3px 10px !important;
@@ -2329,7 +2318,7 @@ body.workspace-body {
 }
 
 .project-meta-bottom .meta-status {
-    color: #1D4ED8 !important;
+    color: #111111 !important;
     font-size: 12.5px;
     font-weight: 700;
 }
@@ -2342,7 +2331,7 @@ body.workspace-body {
 }
 
 .jitter-card-in:hover .open-arrow {
-    color: #1D4ED8;
+    color: #111111;
     transform: translateX(3px);
 }
 
@@ -2355,7 +2344,7 @@ body.workspace-body {
 
 .jitter-add-card:hover {
     background: #FFFFFF !important;
-    border-color: #1D4ED8 !important;
+    border-color: #111111 !important;
     transform: translateY(-4px) !important;
 }
 
@@ -2363,18 +2352,20 @@ body.workspace-body {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: rgba(29, 78, 216, 0.1);
-    border: 1px solid rgba(29, 78, 216, 0.25);
+    background: rgba(17, 17, 17, 0.08);
+    border: 1px solid rgba(17, 17, 17, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 12px;
-    color: #1D4ED8;
+    color: #111111;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .jitter-add-card:hover .new-proj-icon-wrapper {
     transform: scale(1.15) rotate(90deg);
+    background: #111111;
+    color: #FFFFFF;
 }
 
 .new-proj-text {
@@ -2389,8 +2380,7 @@ body.workspace-body {
     margin-top: 4px;
 }
 
-/* 6. MODALS (Clean White Card - New Project & Invite Collaborator) */
-.modal,
+/* 6. JITTER MODAL (Clean White Card) */
 .jitter-modal {
     background: #FFFFFF !important;
     border: 1px solid rgba(17, 17, 17, 0.1) !important;
@@ -2405,75 +2395,19 @@ body.workspace-body {
     100% { transform: scale(1) translateY(0); opacity: 1; }
 }
 
-.modal .modal-head h3,
 .jitter-modal .modal-head h3 { color: #111111 !important; font-weight: 800; font-size: 20px; }
-
-.modal .modal-close-btn,
 .jitter-modal .modal-close-btn { color: #555555 !important; font-size: 16px; }
-
-.modal .modal-sub,
-.jitter-modal .modal-sub { color: #555555 !important; font-size: 13.5px; }
-
-.modal .field label,
-.jitter-modal .field label { color: #111111 !important; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-
-.modal .field input,
+.jitter-modal .modal-sub { color: #555555 !important; }
+.jitter-modal .field label { color: #111111 !important; font-size: 13.5px; font-weight: 700; }
 .jitter-modal .field input {
     background: #FFFFFF !important;
-    border: 1.5px solid rgba(17, 17, 17, 0.2) !important;
+    border: 1px solid rgba(17, 17, 17, 0.2) !important;
     color: #111111 !important;
-    caret-color: #111111 !important;
-    border-radius: 10px !important;
-    height: 44px !important;
-    padding: 0 14px !important;
-    font-size: 14px !important;
-    font-weight: 400 !important;
-    -webkit-text-fill-color: #111111 !important;
+    border-radius: 10px;
 }
-
-.modal .field input::placeholder,
-.jitter-modal .field input::placeholder {
-    color: #9CA3AF !important;
-    font-weight: 400 !important;
-    opacity: 1 !important;
-    -webkit-text-fill-color: #9CA3AF !important;
-}
-
-.modal .field input:focus,
 .jitter-modal .field input:focus {
-    outline: none !important;
     border-color: #1D4ED8 !important;
-    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.18) !important;
-    background: #FFFFFF !important;
-    color: #111111 !important;
-}
-
-.modal .modal-actions,
-.jitter-modal .modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 24px;
-}
-
-.modal .btn.secondary,
-.jitter-modal .btn.secondary {
-    background: #F3F4F6 !important;
-    color: #374151 !important;
-    border: 1px solid #E5E7EB !important;
-    font-weight: 600 !important;
-}
-.modal .btn.secondary:hover,
-.jitter-modal .btn.secondary:hover {
-    background: #E5E7EB !important;
-    color: #111111 !important;
-}
-
-.modal .btn.btn-primary,
-.jitter-modal .btn.btn-primary {
-    background: #111111 !important;
-    color: #FFFFFF !important;
-    font-weight: 600 !important;
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
 }
 
 .modal-create-btn {
