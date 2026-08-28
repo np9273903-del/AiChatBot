@@ -65,32 +65,87 @@ a { color: #1D4ED8; text-decoration: none; font-weight: 600; }
 a:hover { text-decoration: underline; }
 
 /* --------------------------------------------------------------------------
-   AUTH PAGES (Login & Register)
+   AUTH PAGES (Login & Register) — with VIDEO BACKGROUND
 -------------------------------------------------------------------------- */
+
+/* 🎥 VIDEO BACKGROUND LAYER */
+.auth-video-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.auth-bg-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+/* Dark gradient overlay so the card is always readable */
+.auth-video-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(10, 18, 40, 0.72) 0%,
+        rgba(17, 17, 17, 0.58) 50%,
+        rgba(10, 18, 40, 0.72) 100%
+    );
+    backdrop-filter: blur(1.5px);
+}
+
 body.auth-body {
     overflow-y: auto;
     height: auto;
     min-height: 100vh;
-    background-color: #EDEBE4;
+    background-color: #0a1228; /* fallback if video fails */
+}
+
+body.auth-video-body {
+    background-color: transparent;
 }
 
 .auth-wrap {
+    position: relative;
+    z-index: 10; /* above the video layer */
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 24px;
-    background: #EDEBE4;
+    background: transparent;
 }
 
+/* 🌟 GLASSMORPHISM AUTH CARD (floats over video) */
 .auth-card {
-    background: #FFFFFF;
-    border: 1px solid rgba(17, 17, 17, 0.1);
-    border-radius: 16px;
-    padding: 38px 34px;
+    position: relative;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 20px;
+    padding: 40px 36px;
     width: 100%;
     max-width: 420px;
-    box-shadow: 0 12px 32px rgba(17, 17, 17, 0.08);
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    animation: authCardIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes authCardIn {
+    0% {
+        opacity: 0;
+        transform: translateY(28px) scale(0.97);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .auth-brand {
@@ -111,6 +166,7 @@ body.auth-body {
     justify-content: center;
     font-size: 18px;
     font-weight: 800;
+    box-shadow: 0 4px 12px rgba(29, 78, 216, 0.4);
 }
 
 .auth-brand h2 {
@@ -155,18 +211,19 @@ body.auth-body {
     width: 100%;
     padding: 11px 13px;
     border-radius: 8px;
-    border: 1px solid rgba(17, 17, 17, 0.2);
-    background: #FFFFFF;
+    border: 1px solid rgba(17, 17, 17, 0.18);
+    background: rgba(255, 255, 255, 0.85);
     color: #111111;
     font-size: 14px;
     font-family: inherit;
-    transition: border-color .15s, box-shadow .15s;
+    transition: border-color .15s, box-shadow .15s, background .15s;
 }
 
 .field input:focus, .field select:focus, .field textarea:focus {
     outline: none;
     border-color: #1D4ED8;
-    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.18);
 }
 
 .btn {
@@ -220,6 +277,8 @@ body.auth-body {
     font-weight: 700;
     text-decoration: underline;
 }
+
+
 
 /* --------------------------------------------------------------------------
    DASHBOARD (home.php)

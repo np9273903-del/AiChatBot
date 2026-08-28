@@ -7,9 +7,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=11.0">
+<link rel="stylesheet" href="assets/css/style.css?v=12.0">
 </head>
-<body class="auth-body">
+<body class="auth-body auth-video-body">
+
+<!-- 🎥 FULL-SCREEN VIDEO BACKGROUND -->
+<div class="auth-video-bg">
+    <video autoplay muted loop playsinline preload="auto" class="auth-bg-video">
+        <source src="BackgroundVideoForLoginSignup.mp4" type="video/mp4">
+    </video>
+    <!-- Dark overlay for readability -->
+    <div class="auth-video-overlay"></div>
+</div>
+
 <div class="auth-wrap">
     <div class="auth-card">
         <div class="auth-brand">
@@ -40,3 +50,4 @@
 <script src="assets/js/auth.js"></script>
 </body>
 </html>
+
