@@ -331,7 +331,7 @@ if (!$projectId) {
 
 <!-- MODAL: ADD MEMBER -->
 <div class="modal-backdrop" id="addMemberModal">
-    <div class="modal">
+    <div class="modal jitter-modal">
         <div class="modal-head">
             <h3>Invite Collaborator</h3>
             <button class="icon-btn modal-close-btn" id="closeAddMemberModal">✕</button>
