@@ -61,19 +61,19 @@ $user = require_auth_page();
             <div class="hero-top-row">
                 <div class="jitter-badge">
                     <span class="pulse-dot"></span>
-                    <span>Gemini 3.0 Live AI Active</span>
+                    <span>Soen AI Active · Gemini 3.0 Engine</span>
                 </div>
 
-                <!-- 🌟 EXACT JITTER PURPLE TOGGLE BUTTON -->
-                <div class="jitter-toggle-widget" title="Toggle AI Engine Mode">
-                    <span class="toggle-label left-lbl active" id="lblFast">Fast</span>
-                    <label class="jitter-switch-exact">
+                <!-- 🌟 CLEAR FAST / PRO TOGGLE WIDGET -->
+                <div class="jitter-toggle-widget" title="Toggle AI Engine Mode (Fast vs Pro Deep Reasoning)">
+                    <button type="button" class="toggle-label left-lbl" id="lblFast">⚡ Fast</button>
+                    <label class="jitter-switch-exact" for="aiModeSwitch">
                         <input type="checkbox" id="aiModeSwitch" checked>
                         <span class="jitter-switch-track">
                             <span class="jitter-switch-thumb"></span>
                         </span>
                     </label>
-                    <span class="toggle-label right-lbl" id="lblPro">Pro ⚡</span>
+                    <button type="button" class="toggle-label right-lbl active" id="lblPro">Pro ✦</button>
                 </div>
             </div>
 

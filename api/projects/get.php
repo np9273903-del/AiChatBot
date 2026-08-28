@@ -36,6 +36,7 @@ if (!$project) {
     echo json_encode(['success' => false, 'message' => 'Project not found']);
     exit;
 }
+$project['name'] = trim(rtrim(trim($project['name']), ']}))>.,;:/\\|`~*"'));
 
 $stmt = $conn->prepare('
     SELECT u.id, u.email, u.username

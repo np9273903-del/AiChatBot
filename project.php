@@ -92,22 +92,23 @@ if (!$projectId) {
             </button>
         </div>
 
-        <!-- Voice recording bar -->
-        <div class="recording-bar" id="recordingBar">
-            <div class="rec-status">
-                <span class="rec-dot"></span>
-                <span class="rec-label">Recording Voice Message</span>
-                <span class="rec-timer" id="recTimer">0:00</span>
-            </div>
-            <div class="rec-actions">
-                <button class="btn small secondary" id="cancelRecording">Cancel</button>
-                <button class="btn small btn-primary" id="stopRecording">Send Voice ➤</button>
-            </div>
-        </div>
-
-        <!-- Message Composer with all tools -->
+        <!-- Message Composer Container -->
         <div class="composer-container">
-            <div class="composer-wrap">
+            <!-- Voice recording active state bar (Replaces composer-wrap when recording) -->
+            <div class="recording-bar" id="recordingBar">
+                <div class="rec-status">
+                    <span class="rec-dot"></span>
+                    <span class="rec-label">Recording Voice Message</span>
+                    <span class="rec-timer" id="recTimer">0:00</span>
+                </div>
+                <div class="rec-actions">
+                    <button class="btn small secondary" id="cancelRecording">Cancel</button>
+                    <button class="btn small btn-primary" id="stopRecording">Send Voice ➤</button>
+                </div>
+            </div>
+
+            <!-- Normal text input composer -->
+            <div class="composer-wrap" id="composerWrap">
                 <div class="composer-tools-left">
                     <button class="composer-icon-btn" id="openCodeRunnerBtn" title="New Code Snippet in Studio">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
@@ -120,7 +121,7 @@ if (!$projectId) {
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
                     </button>
                 </div>
-                <textarea id="messageInput" class="composer-textarea" rows="1" placeholder="Ask Soen AI to code, refactor, or debug… (e.g. @ai build a navbar)"></textarea>
+                <textarea id="messageInput" class="composer-textarea" rows="1" placeholder="Ask Soen AI to code, refactor, or debug (e.g. @ai build a navbar)"></textarea>
                 <div class="composer-tools-right">
                     <button class="composer-icon-btn mic-btn" id="micBtn" title="Record Voice Note">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>

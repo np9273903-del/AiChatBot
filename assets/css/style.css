@@ -83,16 +83,17 @@ body.auth-body {
     align-items: center;
     justify-content: center;
     padding: 24px;
+    background: #0b0f19;
 }
 
 .auth-card {
     background: #ffffff;
-    border: 1.5px solid var(--swatch-sky);
+    border: 1px solid #e2e8f0;
     border-radius: 16px;
     padding: 38px 34px;
     width: 100%;
     max-width: 420px;
-    box-shadow: 0 12px 36px rgba(0,0,0,0.06);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
 }
 
 .auth-brand {
@@ -106,8 +107,8 @@ body.auth-body {
     width: 36px;
     height: 36px;
     border-radius: 8px;
-    background: linear-gradient(135deg, var(--swatch-sky), var(--swatch-lilac));
-    color: #0f172a;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -130,7 +131,7 @@ body.auth-body {
 
 .auth-card p.sub {
     font-size: 13.5px;
-    color: var(--text-muted);
+    color: #475569 !important; /* 🌟 High contrast dark gray (WCAG AAA) */
     line-height: 1.5;
     margin-bottom: 22px;
 }
@@ -140,7 +141,7 @@ body.auth-body {
     display: block;
     font-size: 13px;
     font-weight: 600;
-    color: #334155;
+    color: #1e293b !important;
     margin-bottom: 5px;
 }
 
@@ -151,7 +152,7 @@ body.auth-body {
     margin-bottom: 5px;
 }
 .field-label-row label { margin-bottom: 0; }
-.forgot-link { font-size: 12px; color: #2563eb; }
+.forgot-link { font-size: 12.5px; color: #2563eb; font-weight: 600; }
 
 .field input, .field select, .field textarea {
     width: 100%;
@@ -180,16 +181,16 @@ body.auth-body {
     padding: 11px 16px;
     border-radius: 8px;
     border: none;
-    background: #0f172a;
-    color: #ffffff;
+    background: #2563eb;
+    color: #ffffff !important;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color .15s;
+    transition: background-color .15s, transform .15s;
 }
 
-.btn:hover { background: #1e293b; }
-.btn-primary { background: #0f172a !important; color: #ffffff !important; }
+.btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+.btn-primary { background: #2563eb !important; color: #ffffff !important; }
 
 .btn.secondary {
     background: #ffffff;
@@ -214,10 +215,14 @@ body.auth-body {
 .switch-link {
     text-align: center;
     margin-top: 22px;
-    font-size: 13px;
-    color: var(--text-muted);
+    font-size: 13.5px;
+    color: #475569 !important; /* 🌟 High contrast dark slate */
 }
-.switch-link a { color: #0f172a; font-weight: 700; }
+.switch-link a {
+    color: #2563eb !important;
+    font-weight: 700;
+    text-decoration: underline;
+}
 
 /* --------------------------------------------------------------------------
    DASHBOARD (home.php)
@@ -850,16 +855,25 @@ body.workspace-body {
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
 }
 
-/* VOICE RECORDING BAR (Hidden by default, dark glassmorphic when active) */
+/* 7. MODERN GLASS COMPOSER AREA */
+.composer-container {
+    padding: 10px 14px 12px;
+    background: #0b1120;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    flex: none;
+}
+
+/* VOICE RECORDING BAR (Smoothly replaces text input composer while recording) */
 .recording-bar {
     display: none !important;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 16px;
+    padding: 10px 14px;
     background: rgba(239, 68, 68, 0.12);
-    border-top: 1px solid rgba(239, 68, 68, 0.25);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 12px;
     color: #f87171;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
 }
 
@@ -874,11 +888,11 @@ body.workspace-body {
 }
 
 .rec-dot {
-    width: 8px;
-    height: 8px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
     background: #ef4444;
-    box-shadow: 0 0 8px #ef4444;
+    box-shadow: 0 0 10px #ef4444;
     animation: pulseMic 1s infinite alternate;
 }
 
@@ -895,15 +909,16 @@ body.workspace-body {
 
 .rec-actions {
     display: flex;
-    gap: 6px;
+    gap: 8px;
 }
 
 .rec-actions .btn {
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 11.5px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+    width: auto;
 }
 
 .rec-actions .btn.secondary {
@@ -913,17 +928,9 @@ body.workspace-body {
 }
 
 .rec-actions .btn-primary {
-    background: #ef4444;
+    background: #ef4444 !important;
     border: none;
-    color: #ffffff;
-}
-
-/* 7. MODERN GLASS COMPOSER AREA */
-.composer-container {
-    padding: 10px 14px 12px;
-    background: #0b1120;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    flex: none;
+    color: #ffffff !important;
 }
 
 .composer-wrap {
@@ -1859,36 +1866,50 @@ body.workspace-body {
     animation: pulseDot 1.5s infinite alternate;
 }
 
-/* 🌟 EXACT JITTER PURPLE / TEAL TOGGLE SWITCH */
+/* 🌟 CLEAR FAST / PRO TOGGLE WIDGET (Zero Ambiguity Active States) */
 .jitter-toggle-widget {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 3px 10px;
-    background: #DEF2F1;
-    border: 1px solid rgba(43, 122, 120, 0.25);
+    gap: 6px;
+    padding: 3px 6px;
+    background: rgba(15, 23, 42, 0.08);
+    border: 1px solid rgba(43, 122, 120, 0.2);
     border-radius: 9999px;
 }
 
 .toggle-label {
+    background: transparent;
+    border: none;
+    font-family: inherit;
     font-size: 12px;
     font-weight: 600;
-    color: #2B7A78;
-    transition: color 0.2s ease;
+    color: #64748b;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     user-select: none;
     cursor: pointer;
 }
 
-.toggle-label.active {
-    color: #17252A;
-    font-weight: 800;
+.toggle-label.left-lbl.active {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+}
+
+.toggle-label.right-lbl.active {
+    background: #7c3aed !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
 }
 
 .jitter-switch-exact {
     position: relative;
     display: inline-block;
-    width: 48px;
-    height: 26px;
+    width: 44px;
+    height: 24px;
     cursor: pointer;
     user-select: none;
 }
@@ -1903,7 +1924,7 @@ body.workspace-body {
 .jitter-switch-track {
     position: absolute;
     inset: 0;
-    background: #cbd5e1;
+    background: #94a3b8; /* Neutral slate when on Fast */
     border-radius: 9999px;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: background 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s ease;
@@ -1914,27 +1935,26 @@ body.workspace-body {
     position: absolute;
     top: 2px;
     left: 2px;
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     background: #FEFFFF;
     border-radius: 50%;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
-    transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.2s ease;
 }
 
-/* Squash & Stretch when clicked */
 .jitter-switch-exact:active .jitter-switch-thumb {
-    width: 25px;
+    width: 23px;
 }
 
-/* ON / CHECKED STATE */
+/* PRO / CHECKED STATE */
 .jitter-switch-exact input:checked + .jitter-switch-track {
-    background: #3AAFA9; /* Flash Cyan */
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 14px rgba(58, 175, 169, 0.45);
+    background: #7c3aed; /* Vibrant Purple when on Pro */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 12px rgba(124, 58, 237, 0.45);
 }
 
 .jitter-switch-exact input:checked + .jitter-switch-track .jitter-switch-thumb {
-    transform: translateX(22px);
+    transform: translateX(20px);
     background: #FEFFFF;
 }
 

@@ -6,7 +6,10 @@ header('Content-Type: application/json');
 $user = require_auth_api();
 
 $input = json_decode(file_get_contents('php://input'), true) ?? $_POST;
-$name = trim($input['name'] ?? '');
+$rawName = trim($input['name'] ?? '');
+// Clean stray brackets, parentheses, quotes, or trailing punctuation
+$name = trim(preg_replace('/[\]\}\)\>]+$/', '', $rawName));
+$name = trim($name, "[]{}()<>.,;:/\\|`~*\"'");
 
 if (strlen($name) < 2) {
     http_response_code(400);

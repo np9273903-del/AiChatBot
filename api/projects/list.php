@@ -20,6 +20,7 @@ $result = $stmt->get_result();
 
 $projects = [];
 while ($row = $result->fetch_assoc()) {
+    $row['name'] = trim(rtrim(trim($row['name']), ']}))>.,;:/\\|`~*"'));
     $projects[] = $row;
 }
 

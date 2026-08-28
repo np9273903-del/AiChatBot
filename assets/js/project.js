@@ -153,9 +153,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!lang) return 'javascript';
         lang = lang.toLowerCase().trim();
         if (lang === 'js' || lang === 'node') return 'javascript';
+        if (lang === 'ts') return 'typescript';
         if (lang === 'py') return 'python';
         if (lang === 'htm') return 'html';
         if (lang === 'c++') return 'cpp';
+        if (lang === 'cs' || lang === 'csharp') return 'csharp';
+        if (lang === 'golang') return 'go';
         if (languageExtensions[lang]) return lang;
         return 'javascript';
     }
@@ -636,23 +639,44 @@ ${jsArt ? `<script>${jsArt.code}</script>` : ''}
         const extracted = [];
 
         const cleanText = rawText.replace(codeBlockRegex, (fullMatch, lang, code) => {
-            const cleanLang = normalizeLanguage(lang);
-            const lines = (code || '').trim().split('\n');
-            const firstLine = (lines[0] || '').trim();
+            const rawLang = (lang || '').toLowerCase().trim();
+            const trimmedCode = (code || '').trim();
+            const lines = trimmedCode.split('\n');
+
+            // If it's shell/bash or just a 1-2 line command (e.g. `java HelloWorld`, `npm run dev`, `pip install`),
+            // keep it as a rendered terminal block in the chat instead of an IDE file!
+            const isTerminal = ['bash', 'sh', 'shell', 'cmd', 'powershell', 'zsh', 'terminal', 'console'].includes(rawLang)
+                || (lines.length <= 2 && /^(?:java|javac|python|node|npm|npx|pip|cargo|git|cd|echo|curl|gcc|g\+\+)\s+/i.test(lines[0].trim()));
+
+            if (isTerminal) {
+                return fullMatch; // Let markdown render it as a syntax-highlighted terminal snippet
+            }
+
+            const cleanLang = normalizeLanguage(rawLang);
             const ext = languageExtensions[cleanLang] || 'txt';
+            const firstLine = (lines[0] || '').trim();
             
             // Extract filename from comment or path (e.g. // index.html, /* style.css */, # app.py)
             let filename = '';
-            const fileMatch = firstLine.match(/^(?:\/\/|\/\*|#)\s*([a-zA-Z0-9_.\-\/]+\.[a-zA-Z0-9]+)/);
+            const fileMatch = firstLine.match(/^(?:\/\/|\/\*|#|<!--)\s*([a-zA-Z0-9_.\-\/]+\.[a-zA-Z0-9]+)/);
             if (fileMatch && fileMatch[1]) {
                 filename = fileMatch[1];
+            } else if (cleanLang === 'java') {
+                const classMatch = trimmedCode.match(/(?:public\s+)?class\s+([A-Za-z0-9_]+)/);
+                filename = classMatch ? `${classMatch[1]}.java` : `Main_${artifacts.length + extracted.length + 1}.java`;
+            } else if (cleanLang === 'html') {
+                filename = (artifacts.length === 0 && extracted.length === 0) ? 'index.html' : `page_${extracted.length + 1}.html`;
+            } else if (cleanLang === 'css') {
+                filename = 'style.css';
+            } else if (cleanLang === 'python') {
+                filename = (artifacts.length === 0 && extracted.length === 0) ? 'main.py' : `script_${extracted.length + 1}.py`;
             } else {
                 filename = `code_${artifacts.length + extracted.length + 1}.${ext}`;
             }
 
             extracted.push({
                 language: cleanLang,
-                code: (code || '').trim(),
+                code: trimmedCode,
                 filename: filename
             });
 
@@ -1135,6 +1159,8 @@ ${jsArt ? `<script>${jsArt.code}</script>` : ''}
             mediaRecorder.start();
             recordingStartedAt = Date.now();
             if (recordingBar) recordingBar.classList.add('show');
+            const composerWrap = document.getElementById('composerWrap');
+            if (composerWrap) composerWrap.style.display = 'none';
             if (micBtn) micBtn.classList.add('recording');
             recordingTimerHandle = setInterval(updateRecTimer, 250);
         } catch (e) {
@@ -1148,6 +1174,8 @@ ${jsArt ? `<script>${jsArt.code}</script>` : ''}
         }
         clearInterval(recordingTimerHandle);
         if (recordingBar) recordingBar.classList.remove('show');
+        const composerWrap = document.getElementById('composerWrap');
+        if (composerWrap) composerWrap.style.display = 'flex';
         if (micBtn) micBtn.classList.remove('recording');
     }
 
