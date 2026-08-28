@@ -936,6 +936,7 @@ body.workspace-body {
     padding: 8px 10px;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
 .composer-wrap:focus-within {
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
@@ -962,8 +963,16 @@ body.workspace-body {
     cursor: pointer;
     transition: all 0.15s;
 }
-.composer-icon-btn:hover { background: rgba(255, 255, 255, 0.1); color: #ffffff; }
-.composer-icon-btn.mic-btn.recording { color: #ef4444; animation: pulseMic 1s infinite; }
+
+.composer-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.composer-icon-btn.mic-btn.recording {
+    color: #ef4444;
+    animation: pulseMic 1s infinite;
+}
 
 .composer-textarea {
     flex: 1;
@@ -978,7 +987,10 @@ body.workspace-body {
     padding: 3px 2px;
     outline: none;
 }
-.composer-textarea::placeholder { color: #64748b; }
+
+.composer-textarea::placeholder {
+    color: #64748b;
+}
 
 .send-btn {
     background: #2563eb;
@@ -993,7 +1005,11 @@ body.workspace-body {
     cursor: pointer;
     transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s;
 }
-.send-btn:hover { background: #1d4ed8; transform: scale(1.06); }
+
+.send-btn:hover {
+    background: #1d4ed8;
+    transform: scale(1.06);
+}
 
 .emoji-picker {
     display: none;
