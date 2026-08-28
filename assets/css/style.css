@@ -66,6 +66,8 @@ a:hover { text-decoration: underline; }
 
 /* --------------------------------------------------------------------------
    AUTH PAGES (Login & Register) — with VIDEO BACKGROUND
+   Shared system: .auth-input · .auth-btn
+   Consistent placeholder, transitions, focus, hover, card animation
 -------------------------------------------------------------------------- */
 
 /* 🎥 VIDEO BACKGROUND LAYER */
@@ -84,7 +86,7 @@ a:hover { text-decoration: underline; }
     display: block;
 }
 
-/* Dark gradient overlay so the card is always readable */
+/* Dark gradient overlay — always readable card */
 .auth-video-overlay {
     position: absolute;
     inset: 0;
@@ -108,9 +110,10 @@ body.auth-video-body {
     background-color: transparent;
 }
 
+/* ---------- AUTH WRAP ---------- */
 .auth-wrap {
     position: relative;
-    z-index: 10; /* above the video layer */
+    z-index: 10;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -119,46 +122,44 @@ body.auth-video-body {
     background: transparent;
 }
 
-/* 🌟 GLASSMORPHISM AUTH CARD (floats over video) */
+/* ---------- GLASSMORPHISM CARD ---------- */
+/* Identical on login AND signup — same animation, same radius, same shadow */
 .auth-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.93);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     border-radius: 20px;
     padding: 40px 36px;
     width: 100%;
     max-width: 420px;
     box-shadow:
-        0 24px 60px rgba(0, 0, 0, 0.35),
-        0 0 0 1px rgba(255, 255, 255, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+        0 24px 64px rgba(0, 0, 0, 0.38),
+        0 0 0 1px rgba(255, 255, 255, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    /* Mount animation — identical for both forms */
     animation: authCardIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* Shared mount keyframe (one definition, both pages inherit) */
 @keyframes authCardIn {
-    0% {
-        opacity: 0;
-        transform: translateY(28px) scale(0.97);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+    0%   { opacity: 0; transform: translateY(30px) scale(0.96); }
+    100% { opacity: 1; transform: translateY(0)    scale(1);    }
 }
 
+/* ---------- BRAND HEADER ---------- */
 .auth-brand {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 22px;
+    margin-bottom: 24px;
 }
 
 .brand-logo-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
     background: #1D4ED8;
     color: #FFFFFF;
     display: flex;
@@ -166,117 +167,223 @@ body.auth-video-body {
     justify-content: center;
     font-size: 18px;
     font-weight: 800;
-    box-shadow: 0 4px 12px rgba(29, 78, 216, 0.4);
+    box-shadow: 0 4px 14px rgba(29, 78, 216, 0.4);
+    flex-shrink: 0;
 }
 
 .auth-brand h2 {
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 800;
     color: #111111;
+    letter-spacing: -0.01em;
 }
 
 .auth-card h1 {
-    font-size: 22px;
+    font-size: 23px;
     font-weight: 800;
     margin-bottom: 6px;
     color: #111111;
+    letter-spacing: -0.02em;
 }
 
 .auth-card p.sub {
     font-size: 13.5px;
-    color: #555555 !important;
-    line-height: 1.5;
-    margin-bottom: 22px;
+    color: #666666;
+    line-height: 1.55;
+    margin-bottom: 24px;
+    font-weight: 400;
 }
 
+/* ---------- FIELD LABELS ---------- */
 .field { margin-bottom: 16px; }
+
 .field label {
     display: block;
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 600;
-    color: #111111 !important;
-    margin-bottom: 5px;
+    color: #333333;
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
 }
 
 .field-label-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 .field-label-row label { margin-bottom: 0; }
-.forgot-link { font-size: 12.5px; color: #1D4ED8; font-weight: 600; }
 
-.field input, .field select, .field textarea {
+.forgot-link {
+    font-size: 12px;
+    color: #1D4ED8;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+.forgot-link:hover { color: #1e40af; text-decoration: underline; }
+
+/* ---------- SHARED AUTH INPUT (.auth-input) ---------- */
+/*  Applied to: .field input + .auth-input selector
+    Placeholder: always light gray (#9CA3AF), normal weight, never bold
+    Value text:  near-black (#111111), normal weight
+    Focus:       blue border + blue glow ring, 0.2s ease-in-out              */
+
+.field input,
+.field select,
+.field textarea,
+.auth-input {
     width: 100%;
-    padding: 11px 13px;
-    border-radius: 8px;
-    border: 1px solid rgba(17, 17, 17, 0.18);
-    background: rgba(255, 255, 255, 0.85);
+    height: 46px;                            /* consistent height across both forms */
+    padding: 0 14px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(17, 17, 17, 0.16);
+    background: rgba(255, 255, 255, 0.80);
     color: #111111;
     font-size: 14px;
+    font-weight: 400;                        /* normal weight — never bold-looking */
     font-family: inherit;
-    transition: border-color .15s, box-shadow .15s, background .15s;
+    line-height: 1;
+    /* Unified transition timing for all state changes */
+    transition:
+        border-color  0.2s ease-in-out,
+        box-shadow    0.2s ease-in-out,
+        background    0.2s ease-in-out;
 }
 
-.field input:focus, .field select:focus, .field textarea:focus {
+/* textarea gets auto height instead of fixed */
+.field textarea, textarea.auth-input {
+    height: auto;
+    padding: 12px 14px;
+    line-height: 1.5;
+}
+
+/* ✅ FIX: Placeholder must always appear light gray, low-weight, never pre-filled */
+.field input::placeholder,
+.field select::placeholder,
+.field textarea::placeholder,
+.auth-input::placeholder {
+    color: #9CA3AF !important;    /* Tailwind gray-400 — industry standard */
+    font-weight: 400 !important;
+    opacity: 1 !important;        /* Firefox suppresses opacity by default */
+    font-style: normal !important;
+}
+
+/* Focus state — identical blue ring on both forms */
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.auth-input:focus {
     outline: none;
     border-color: #1D4ED8;
     background: #FFFFFF;
-    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.18);
+    box-shadow: 0 0 0 3.5px rgba(29, 78, 216, 0.18);
 }
 
-.btn {
+/* Hover state (subtle border darkening before focus) */
+.field input:hover:not(:focus),
+.field textarea:hover:not(:focus),
+.auth-input:hover:not(:focus) {
+    border-color: rgba(17, 17, 17, 0.30);
+    background: rgba(255, 255, 255, 0.92);
+}
+
+/* ---------- SHARED AUTH BUTTON (.auth-btn / .btn-primary) ---------- */
+/*  Identical height, radius, weight, bg, and transitions on both forms    */
+
+.btn,
+.auth-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
+    gap: 8px;
     width: 100%;
-    padding: 11px 16px;
-    border-radius: 8px;
+    height: 48px;                            /* fixed height — same on both forms */
+    padding: 0 18px;
+    border-radius: 12px;
     border: none;
     background: #111111;
     color: #FFFFFF !important;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
     cursor: pointer;
-    transition: background-color .15s, transform .15s;
+    /* Unified transition — same easing as inputs */
+    transition:
+        background-color  0.2s ease-in-out,
+        transform         0.2s ease-in-out,
+        box-shadow        0.2s ease-in-out;
 }
 
-.btn:hover { background: #262626; transform: translateY(-1px); }
-.btn-primary { background: #111111 !important; color: #FFFFFF !important; }
+/* Hover — darken + subtle lift */
+.btn:hover,
+.auth-btn:hover {
+    background: #1a1a1a !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(17, 17, 17, 0.25);
+}
 
+/* Active / Press — scale down slightly */
+.btn:active,
+.auth-btn:active {
+    background: #000000 !important;
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 8px rgba(17, 17, 17, 0.2);
+    transition-duration: 0.08s;
+}
+
+/* Ensure .btn-primary is also covered */
+.btn-primary {
+    background: #111111 !important;
+    color: #FFFFFF !important;
+}
+
+/* Secondary / Cancel button (modal etc.) */
 .btn.secondary {
-    background: #FFFFFF;
-    border: 1px solid rgba(17, 17, 17, 0.2);
-    color: #111111;
+    background: rgba(255, 255, 255, 0.75);
+    border: 1.5px solid rgba(17, 17, 17, 0.18);
+    color: #111111 !important;
+    font-weight: 600;
 }
-.btn.secondary:hover { background: #EDEBE4; color: #111111; }
-.btn.small { width: auto; padding: 6px 12px; font-size: 12.5px; border-radius: 6px; }
+.btn.secondary:hover {
+    background: #FFFFFF;
+    border-color: rgba(17, 17, 17, 0.30);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(17, 17, 17, 0.1);
+}
 
+.btn.small { width: auto; height: 36px; padding: 0 14px; font-size: 12.5px; border-radius: 8px; }
+
+/* ---------- ERROR MESSAGE ---------- */
 .error-msg {
-    background: #fef2f2;
+    background: rgba(254, 242, 242, 0.95);
     border: 1px solid #fecaca;
     color: #991b1b;
-    padding: 9px 12px;
-    border-radius: 6px;
+    padding: 10px 13px;
+    border-radius: 8px;
     font-size: 13px;
+    font-weight: 500;
     margin-bottom: 16px;
     display: none;
+    animation: authCardIn 0.3s ease both;  /* same fade-in as card */
 }
 .error-msg.show { display: block; }
 
+/* ---------- SWITCH LINK (bottom of card) ---------- */
 .switch-link {
     text-align: center;
-    margin-top: 22px;
+    margin-top: 24px;
     font-size: 13.5px;
-    color: #555555 !important;
+    color: #555555;
+    font-weight: 400;
 }
 .switch-link a {
-    color: #1D4ED8 !important;
+    color: #1D4ED8;
     font-weight: 700;
     text-decoration: underline;
+    transition: color 0.2s ease;
 }
+.switch-link a:hover { color: #1e40af; }
+
 
 
 /* --------------------------------------------------------------------------
