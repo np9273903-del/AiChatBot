@@ -198,10 +198,11 @@ body.auth-video-body {
     font-weight: 400;
 }
 
-/* ---------- FIELD LABELS ---------- */
-.field { margin-bottom: 16px; }
+/* ---------- FIELD LABELS (AUTH PAGES ONLY) ---------- */
+.auth-card .field { margin-bottom: 16px; }
 
-.field label {
+body.auth-body .field label,
+.auth-card .field label {
     display: block;
     font-size: 12.5px;
     font-weight: 600;
@@ -210,13 +211,13 @@ body.auth-video-body {
     letter-spacing: 0.01em;
 }
 
-.field-label-row {
+.auth-card .field-label-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 6px;
 }
-.field-label-row label { margin-bottom: 0; }
+.auth-card .field-label-row label { margin-bottom: 0; }
 
 .forgot-link {
     font-size: 12px;
@@ -226,11 +227,13 @@ body.auth-video-body {
 }
 .forgot-link:hover { color: #93C5FD; text-decoration: underline; }
 
-/* ---------- SHARED AUTH INPUT — TRANSPARENT GLASS ---------- */
-/* appearance:none kills browser default white bg on all browsers */
-.field input,
-.field select,
-.field textarea,
+/* ---------- SHARED AUTH INPUT — TRANSPARENT GLASS (AUTH PAGES ONLY) ---------- */
+body.auth-body .field input,
+body.auth-body .field select,
+body.auth-body .field textarea,
+.auth-card .field input,
+.auth-card .field select,
+.auth-card .field textarea,
 .auth-input {
     width: 100%;
     height: 46px;
@@ -252,16 +255,21 @@ body.auth-video-body {
 }
 
 /* textarea auto height */
-.field textarea, textarea.auth-input {
+body.auth-body .field textarea,
+.auth-card .field textarea,
+textarea.auth-input {
     height: auto;
     padding: 12px 14px;
     line-height: 1.5;
 }
 
 /* ✅ Placeholder — dimmed white, never pre-filled looking */
-.field input::placeholder,
-.field select::placeholder,
-.field textarea::placeholder,
+body.auth-body .field input::placeholder,
+body.auth-body .field select::placeholder,
+body.auth-body .field textarea::placeholder,
+.auth-card .field input::placeholder,
+.auth-card .field select::placeholder,
+.auth-card .field textarea::placeholder,
 .auth-input::placeholder {
     color: rgba(255, 255, 255, 0.38) !important;
     font-weight: 400 !important;
@@ -270,11 +278,14 @@ body.auth-video-body {
 }
 
 /* ✅ FIX: Override browser autofill white background using inset box-shadow trick */
-/* Chrome/Safari fill a white bg that can't be removed any other way */
-.field input:-webkit-autofill,
-.field input:-webkit-autofill:hover,
-.field input:-webkit-autofill:focus,
-.field input:-webkit-autofill:active,
+body.auth-body .field input:-webkit-autofill,
+body.auth-body .field input:-webkit-autofill:hover,
+body.auth-body .field input:-webkit-autofill:focus,
+body.auth-body .field input:-webkit-autofill:active,
+.auth-card .field input:-webkit-autofill,
+.auth-card .field input:-webkit-autofill:hover,
+.auth-card .field input:-webkit-autofill:focus,
+.auth-card .field input:-webkit-autofill:active,
 .auth-input:-webkit-autofill,
 .auth-input:-webkit-autofill:hover,
 .auth-input:-webkit-autofill:focus {
@@ -283,21 +294,25 @@ body.auth-video-body {
     -webkit-text-fill-color: #FFFFFF !important;
     caret-color: #FFFFFF !important;
     border: none !important;
-    /* Delay the autofill animation so it doesn't flash white */
     transition: background-color 9999s ease-in-out 0s !important;
 }
 
 /* Hover state */
-.field input:hover:not(:focus),
-.field textarea:hover:not(:focus),
+body.auth-body .field input:hover:not(:focus),
+body.auth-body .field textarea:hover:not(:focus),
+.auth-card .field input:hover:not(:focus),
+.auth-card .field textarea:hover:not(:focus),
 .auth-input:hover:not(:focus) {
     background: rgba(255, 255, 255, 0.18) !important;
 }
 
 /* Focus state — subtle glow ring, borderless transparent */
-.field input:focus,
-.field select:focus,
-.field textarea:focus,
+body.auth-body .field input:focus,
+body.auth-body .field select:focus,
+body.auth-body .field textarea:focus,
+.auth-card .field input:focus,
+.auth-card .field select:focus,
+.auth-card .field textarea:focus,
 .auth-input:focus {
     outline: none;
     border: none !important;
@@ -2380,7 +2395,8 @@ body.workspace-body {
     margin-top: 4px;
 }
 
-/* 6. JITTER MODAL (Clean White Card) */
+/* 6. MODALS (Clean White Card - New Project & Invite Collaborator) */
+.modal,
 .jitter-modal {
     background: #FFFFFF !important;
     border: 1px solid rgba(17, 17, 17, 0.1) !important;
@@ -2395,19 +2411,85 @@ body.workspace-body {
     100% { transform: scale(1) translateY(0); opacity: 1; }
 }
 
+.modal .modal-head h3,
 .jitter-modal .modal-head h3 { color: #111111 !important; font-weight: 800; font-size: 20px; }
+
+.modal .modal-close-btn,
 .jitter-modal .modal-close-btn { color: #555555 !important; font-size: 16px; }
-.jitter-modal .modal-sub { color: #555555 !important; }
-.jitter-modal .field label { color: #111111 !important; font-size: 13.5px; font-weight: 700; }
-.jitter-modal .field input {
+
+.modal .modal-sub,
+.jitter-modal .modal-sub { color: #555555 !important; font-size: 13.5px; }
+
+.modal .field label,
+.jitter-modal .field label { color: #111111 !important; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+
+.modal .field input,
+.jitter-modal .field input,
+.modal-backdrop input,
+#memberEmail,
+#projectName {
     background: #FFFFFF !important;
-    border: 1px solid rgba(17, 17, 17, 0.2) !important;
+    border: 1.5px solid rgba(17, 17, 17, 0.25) !important;
     color: #111111 !important;
-    border-radius: 10px;
+    caret-color: #111111 !important;
+    border-radius: 10px !important;
+    height: 44px !important;
+    padding: 0 14px !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    -webkit-text-fill-color: #111111 !important;
 }
-.jitter-modal .field input:focus {
-    border-color: #1D4ED8 !important;
-    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+
+.modal .field input::placeholder,
+.jitter-modal .field input::placeholder,
+.modal-backdrop input::placeholder,
+#memberEmail::placeholder,
+#projectName::placeholder {
+    color: #111111 !important;
+    font-weight: 400 !important;
+    opacity: 0.55 !important;
+    -webkit-text-fill-color: #111111 !important;
+}
+
+.modal .field input:focus,
+.jitter-modal .field input:focus,
+.modal-backdrop input:focus,
+#memberEmail:focus,
+#projectName:focus {
+    outline: none !important;
+    border-color: #111111 !important;
+    box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.15) !important;
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    -webkit-text-fill-color: #111111 !important;
+}
+
+.modal .modal-actions,
+.jitter-modal .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.modal .btn.secondary,
+.jitter-modal .btn.secondary {
+    background: #F3F4F6 !important;
+    color: #374151 !important;
+    border: 1px solid #E5E7EB !important;
+    font-weight: 600 !important;
+}
+.modal .btn.secondary:hover,
+.jitter-modal .btn.secondary:hover {
+    background: #E5E7EB !important;
+    color: #111111 !important;
+}
+
+.modal .btn.btn-primary,
+.jitter-modal .btn.btn-primary {
+    background: #111111 !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
 }
 
 .modal-create-btn {
