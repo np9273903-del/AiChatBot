@@ -15,11 +15,13 @@ $user = require_auth_page();
 </head>
 <body class="dashboard-body jitter-motion-page">
 
-<!-- 🌟 AMBIENT GLOWING AURORA BACKGROUND -->
-<div class="animated-bg">
-    <div class="glow-orb orb-1"></div>
-    <div class="glow-orb orb-2"></div>
-    <div class="glow-orb orb-3"></div>
+<!-- 🎥 FULL-SCREEN VIDEO BACKGROUND (same as login/signup) -->
+<div class="auth-video-bg">
+    <video autoplay muted loop playsinline preload="auto" class="auth-bg-video">
+        <source src="BackgroundVideoForLoginSignup.mp4" type="video/mp4">
+    </video>
+    <!-- Very subtle dark overlay — lighter than auth pages so dashboard stays bright -->
+    <div class="dash-video-overlay"></div>
 </div>
 
 <!-- 🌟 JITTER FLOATING ISLAND NAVIGATION -->
@@ -35,10 +37,6 @@ $user = require_auth_page();
             <a href="#projects" class="jitter-nav-item active" data-tab="projects">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
                 <span>Projects</span>
-            </a>
-            <a href="api/ai/test.php" class="jitter-nav-item" data-tab="ai-status" target="_blank">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                <span>AI Health</span>
             </a>
         </div>
 

@@ -279,16 +279,36 @@ body.auth-video-body {
 }
 
 
-
 /* --------------------------------------------------------------------------
    DASHBOARD (home.php)
 -------------------------------------------------------------------------- */
+
+/* Lighter overlay for dashboard — lets the video show through while keeping content readable */
+.dash-video-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(10, 18, 40, 0.55) 0%,
+        rgba(17, 17, 17, 0.40) 50%,
+        rgba(10, 18, 40, 0.55) 100%
+    );
+    backdrop-filter: blur(0.5px);
+}
+
 body.dashboard-body {
     overflow-y: auto;
     height: auto;
     min-height: 100vh;
-    background-color: #faf7ee;
+    background-color: #0a1228; /* fallback if video fails */
 }
+
+/* Make main content container visible above video */
+.dashboard-container {
+    position: relative;
+    z-index: 10;
+}
+
 
 .topbar {
     display: flex;
