@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Sign In - Soen AI Workspace</title>
+<title>Log in - Soen AI Workspace</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=<?= time() ?>">
+<link rel="stylesheet" href="assets/css/style.css?v=14.0">
 </head>
 <body class="auth-clean-body">
 
-<!-- Clean Top Header with Logo -->
+<!-- Top Header with Logo -->
 <header class="auth-clean-header">
     <a href="login.html" class="auth-clean-logo">
         <span class="auth-logo-badge">⚡</span>
@@ -21,39 +21,48 @@
 
 <div class="auth-clean-wrapper">
     <main class="auth-clean-container">
-        <h1 class="auth-clean-title">Welcome to your professional community</h1>
-        
+        <h1 class="auth-clean-title">Welcome back</h1>
+        <p class="auth-clean-sub">Log in to collaborate on code with your team &amp; Soen AI.</p>
+
         <div class="error-msg" id="errorMsg"></div>
 
         <form id="loginForm" class="auth-clean-form">
             <div class="auth-field">
-                <label for="email">Email or username</label>
+                <label for="email">Email address</label>
                 <input type="email" id="email" name="email" required autocomplete="email" autofocus>
             </div>
 
             <div class="auth-field">
                 <div class="auth-field-row">
                     <label for="password">Password</label>
+                    <a href="forgot-password.php" class="auth-clean-link">Forgot?</a>
+                </div>
+                <div class="auth-pw-wrap">
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
                     <button type="button" class="auth-pw-toggle" data-target="password">Show</button>
                 </div>
-                <input type="password" id="password" name="password" required autocomplete="current-password">
             </div>
 
-            <div class="auth-forgot-wrap">
-                <a href="forgot-password.php" class="auth-clean-link">Forgot password?</a>
-            </div>
-
-            <button class="btn-auth-primary" type="submit">Sign in</button>
-
-            <div class="auth-divider">
-                <span>or</span>
-            </div>
-
-            <a href="register.html" class="btn-auth-secondary">New to Soen AI? Join now</a>
+            <button class="btn-auth-primary" type="submit">Log in to Workspace</button>
         </form>
+
+        <p class="auth-clean-footer">Don't have an account? <a href="register.html" class="auth-clean-link">Create one for free</a></p>
     </main>
 </div>
 
 <script src="assets/js/auth.js"></script>
+<script>
+document.querySelectorAll('.auth-pw-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        const input = document.getElementById(targetId);
+        if (input) {
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            btn.textContent = isPassword ? 'Hide' : 'Show';
+        }
+    });
+});
+</script>
 </body>
 </html>

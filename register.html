@@ -7,11 +7,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=<?= time() ?>">
+<link rel="stylesheet" href="assets/css/style.css?v=14.0">
 </head>
 <body class="auth-clean-body">
 
-<!-- Clean Top Header with Logo -->
+<!-- Top Header with Logo -->
 <header class="auth-clean-header">
     <a href="login.html" class="auth-clean-logo">
         <span class="auth-logo-badge">⚡</span>
@@ -22,7 +22,7 @@
 <div class="auth-clean-wrapper">
     <main class="auth-clean-container">
         <h1 class="auth-clean-title">Make the most of your professional life</h1>
-        
+
         <div class="error-msg" id="errorMsg"></div>
 
         <form id="registerForm" class="auth-clean-form">
@@ -46,9 +46,7 @@
 
             <button class="btn-auth-primary" type="submit">Agree &amp; Join</button>
 
-            <div class="auth-divider">
-                <span>or</span>
-            </div>
+            <div class="auth-divider"><span>or</span></div>
 
             <a href="login.html" class="btn-auth-secondary">Already on Soen AI? Sign in</a>
         </form>
@@ -56,5 +54,18 @@
 </div>
 
 <script src="assets/js/auth.js"></script>
+<script>
+document.querySelectorAll('.auth-pw-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        const input = document.getElementById(targetId);
+        if (input) {
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            btn.textContent = isPassword ? 'Hide' : 'Show';
+        }
+    });
+});
+</script>
 </body>
 </html>
