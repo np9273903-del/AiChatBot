@@ -48,4 +48,15 @@ if (registerForm) {
             showError(err.message);
         }
     });
-}
+// Password visibility toggle (like LinkedIn)
+document.querySelectorAll('.auth-pw-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target') || 'password';
+        const input = document.getElementById(targetId);
+        if (input) {
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            btn.textContent = isPassword ? 'Hide' : 'Show';
+        }
+    });
+});

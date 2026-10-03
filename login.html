@@ -2,50 +2,58 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Log in - Soen AI Workspace</title>
+<title>Sign In - Soen AI Workspace</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=12.0">
+<link rel="stylesheet" href="assets/css/style.css?v=<?= time() ?>">
 </head>
-<body class="auth-body auth-video-body">
+<body class="auth-clean-body">
 
-<!-- 🎥 FULL-SCREEN VIDEO BACKGROUND -->
-<div class="auth-video-bg">
-    <video autoplay muted loop playsinline preload="auto" class="auth-bg-video">
-        <source src="BackgroundVideoForLoginSignup.mp4" type="video/mp4">
-    </video>
-    <!-- Dark overlay for readability -->
-    <div class="auth-video-overlay"></div>
-</div>
+<!-- Clean Top Header with Logo -->
+<header class="auth-clean-header">
+    <a href="login.html" class="auth-clean-logo">
+        <span class="auth-logo-badge">⚡</span>
+        <span class="auth-logo-text">Soen<strong>AI</strong></span>
+    </a>
+</header>
 
-<div class="auth-wrap">
-    <div class="auth-card">
-        <div class="auth-brand">
-            <div class="brand-logo-icon">⚡</div>
-            <h2>Soen AI</h2>
-        </div>
-        <h1>Welcome back</h1>
-        <p class="sub">Log in to collaborate on code with your team &amp; Soen AI.</p>
+<div class="auth-clean-wrapper">
+    <main class="auth-clean-container">
+        <h1 class="auth-clean-title">Welcome to your professional community</h1>
+        
         <div class="error-msg" id="errorMsg"></div>
-        <form id="loginForm">
-            <div class="field">
-                <label for="email">Email address</label>
+
+        <form id="loginForm" class="auth-clean-form">
+            <div class="auth-field">
+                <label for="email">Email or username</label>
                 <input type="email" id="email" name="email" required autocomplete="email" autofocus>
             </div>
-            <div class="field">
-                <div class="field-label-row">
+
+            <div class="auth-field">
+                <div class="auth-field-row">
                     <label for="password">Password</label>
-                    <a href="forgot-password.php" class="forgot-link">Forgot?</a>
+                    <button type="button" class="auth-pw-toggle" data-target="password">Show</button>
                 </div>
                 <input type="password" id="password" name="password" required autocomplete="current-password">
             </div>
-            <button class="btn btn-primary" type="submit">Log in to Workspace</button>
+
+            <div class="auth-forgot-wrap">
+                <a href="forgot-password.php" class="auth-clean-link">Forgot password?</a>
+            </div>
+
+            <button class="btn-auth-primary" type="submit">Sign in</button>
+
+            <div class="auth-divider">
+                <span>or</span>
+            </div>
+
+            <a href="register.html" class="btn-auth-secondary">New to Soen AI? Join now</a>
         </form>
-        <div class="switch-link">Don't have an account? <a href="register.html">Create one for free</a></div>
-    </div>
+    </main>
 </div>
+
 <script src="assets/js/auth.js"></script>
 </body>
 </html>
