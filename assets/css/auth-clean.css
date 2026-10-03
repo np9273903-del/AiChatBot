@@ -1,0 +1,301 @@
+/* ==========================================================================
+   SOEN AI - CLEAN AUTHENTICATION STYLES (LINKEDIN INSPIRED)
+   Pages: login.html, register.html, forgot-password.php
+   ========================================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body.auth-clean-body {
+    background-color: #ffffff !important;
+    color: #191919;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    overflow-y: auto !important;
+    height: auto !important;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Top Header / Logo ── */
+.auth-clean-header {
+    padding: 24px 32px 16px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+}
+
+.auth-clean-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #111111;
+}
+
+.auth-clean-logo .logo-word {
+    font-weight: 800;
+    color: #000000;
+}
+
+.auth-clean-logo .logo-badge {
+    background: #0A66C2;
+    color: #ffffff;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 800;
+    padding: 2px 5px;
+    margin-left: 2px;
+    line-height: 1.2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Main Wrapper & Container ── */
+.auth-clean-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 24px 20px 60px;
+    width: 100%;
+}
+
+.auth-clean-container {
+    width: 100%;
+    max-width: 400px;
+    background: #ffffff;
+}
+
+/* ── Warm Terracotta Serif Heading (Identical to LinkedIn Screenshot) ── */
+.auth-clean-title {
+    font-family: 'Merriweather', -apple-system-headline, Georgia, 'Times New Roman', serif;
+    font-size: 38px;
+    font-weight: 300;
+    line-height: 1.22;
+    color: #8F5849;
+    letter-spacing: -0.015em;
+    margin-bottom: 28px;
+}
+
+.auth-clean-sub {
+    font-size: 15px;
+    color: rgba(0, 0, 0, 0.7);
+    margin-top: -18px;
+    margin-bottom: 24px;
+    line-height: 1.45;
+}
+
+/* ── Form & Field Layout ── */
+.auth-clean-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.auth-field {
+    margin-bottom: 18px;
+    position: relative;
+}
+
+.auth-field label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.85);
+    margin-bottom: 6px;
+}
+
+.auth-field input {
+    width: 100%;
+    height: 48px;
+    border: 1px solid rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+    padding: 0 14px;
+    font-size: 15px;
+    color: #000000;
+    background: #ffffff;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    font-family: inherit;
+}
+
+.auth-field input:focus {
+    border: 2px solid #0A66C2;
+    box-shadow: none;
+    padding: 0 13px; /* account for 2px border */
+}
+
+/* Password wrapper with inline Show/Hide toggle */
+.auth-pw-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.auth-pw-wrap input {
+    padding-right: 64px !important;
+}
+
+.auth-pw-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    background: none;
+    border: none;
+    color: #0A66C2;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0 14px;
+    cursor: pointer;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-pw-toggle:hover {
+    color: #004182;
+    text-decoration: underline;
+}
+
+/* Forgot Password Link */
+.auth-forgot-link {
+    display: inline-block;
+    color: #0A66C2;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 4px;
+    margin-bottom: 22px;
+}
+
+.auth-forgot-link:hover {
+    color: #004182;
+    text-decoration: underline;
+}
+
+/* ── Primary Pill Button (Sign In / Agree & Join) ── */
+.btn-auth-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 52px;
+    border-radius: 28px;
+    border: none;
+    background: #0A66C2;
+    color: #ffffff !important;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 4px;
+    transition: background-color 0.15s ease;
+    font-family: inherit;
+}
+
+.btn-auth-primary:hover {
+    background: #004182;
+    text-decoration: none;
+}
+
+.btn-auth-primary:active {
+    background: #003366;
+}
+
+/* ── Divider ("or") ── */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    margin: 22px 0;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 13px;
+    text-align: center;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.auth-divider span {
+    padding: 0 16px;
+}
+
+/* ── Secondary Outline Pill Buttons ── */
+.btn-auth-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 50px;
+    border-radius: 28px;
+    border: 1px solid #717171;
+    background: #ffffff;
+    color: rgba(0, 0, 0, 0.9) !important;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    margin-bottom: 14px;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.btn-auth-secondary:hover {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.9);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.9);
+    text-decoration: none;
+}
+
+.btn-auth-secondary svg {
+    flex-shrink: 0;
+}
+
+/* ── Feedback Messages ── */
+.error-msg {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    color: #dc2626;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 13.5px;
+    font-weight: 500;
+    margin-bottom: 18px;
+    display: none;
+}
+.error-msg.show { display: block; }
+
+.success-msg {
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    color: #16a34a;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 13.5px;
+    font-weight: 500;
+    margin-bottom: 18px;
+    display: none;
+}
+.success-msg.show { display: block; }
+
+/* Password strength */
+.strength { margin-top: 6px; min-height: 16px; }
+#resetStrength { font-size: 12px; font-weight: 600; }
