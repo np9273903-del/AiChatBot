@@ -11,22 +11,20 @@ if (current_user()) { header('Location: home.php'); exit; }
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap">
-<link rel="stylesheet" href="assets/css/auth-clean.css?v=20.0">
+<link rel="stylesheet" href="assets/css/auth-clean.css?v=25.0">
 </head>
 <body class="auth-clean-body">
 
-<!-- Header Logo -->
-<header class="auth-clean-header">
-    <a href="login.html" class="auth-clean-logo">
-        <span class="logo-word">Soen</span><span class="logo-badge">AI</span>
-    </a>
-</header>
+<div class="auth-page-shell">
+    <div class="auth-clean-wrapper">
+        <!-- Logo placed cleanly in page flow (NO separate taskbar) -->
+        <a href="login.html" class="auth-brand-mark">
+            <span class="logo-text">Soen</span><span class="logo-badge">AI</span>
+        </a>
 
-<div class="auth-clean-wrapper">
-    <main class="auth-clean-container">
-        <!-- LinkedIn-style warm terracotta serif heading -->
-        <h1 class="auth-clean-title">Forgot your<br>password?</h1>
-        <p class="auth-clean-sub">Enter your email and new password to recover access.</p>
+        <!-- Headline matching LinkedIn style -->
+        <h1 class="auth-clean-title">Forgot password?<br>Reset your access</h1>
+        <p class="auth-clean-sub">Enter your email and new password to recover access to your workspace.</p>
 
         <div class="error-msg" id="resetError"></div>
         <div class="success-msg" id="resetSuccess"></div>
@@ -62,7 +60,17 @@ if (current_user()) { header('Location: home.php'); exit; }
 
             <a href="login.html" class="btn-auth-secondary">Back to Sign in</a>
         </form>
-    </main>
+    </div>
+
+    <!-- Production Trust Footer -->
+    <footer class="auth-page-footer">
+        <span class="auth-footer-copy">Soen AI &copy; 2026</span>
+        <a href="#">User Agreement</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Community Guidelines</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">Help Center</a>
+    </footer>
 </div>
 
 <script src="assets/js/reset.js"></script>

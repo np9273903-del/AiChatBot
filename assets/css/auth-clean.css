@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SOEN AI - CLEAN AUTHENTICATION STYLES (LINKEDIN INSPIRED)
+   SOEN AI - PRODUCTION AUTH SYSTEM (HUMAN CRAFTED, LINKEDIN STYLE)
    Pages: login.html, register.html, forgot-password.php
    ========================================================================== */
 
@@ -9,92 +9,86 @@
     padding: 0;
 }
 
-body.auth-clean-body {
+html, body.auth-clean-body {
     background-color: #ffffff !important;
     color: #191919;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     min-height: 100vh;
-    overflow-y: auto !important;
     height: auto !important;
+    overflow-y: auto !important;
+    margin: 0;
+    padding: 0;
+}
+
+/* ── Seamless Page Layout (NO top taskbar / header bar) ── */
+.auth-page-shell {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-}
-
-/* ── Top Header / Logo ── */
-.auth-clean-header {
-    padding: 24px 32px 16px;
+    justify-content: space-between;
     background: #ffffff;
-    display: flex;
-    align-items: center;
+    padding: 32px 24px 24px;
 }
 
-.auth-clean-logo {
+.auth-clean-wrapper {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding-top: 12px;
+}
+
+/* ── Brand Mark (Sits naturally above title, NO separate taskbar) ── */
+.auth-brand-mark {
     display: inline-flex;
     align-items: center;
     gap: 3px;
     text-decoration: none;
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 700;
     letter-spacing: -0.02em;
     color: #111111;
+    margin-bottom: 24px;
 }
 
-.auth-clean-logo .logo-word {
+.auth-brand-mark .logo-text {
     font-weight: 800;
     color: #000000;
 }
 
-.auth-clean-logo .logo-badge {
+.auth-brand-mark .logo-badge {
     background: #0A66C2;
     color: #ffffff;
     border-radius: 4px;
     font-size: 15px;
     font-weight: 800;
-    padding: 2px 5px;
+    padding: 2px 6px;
     margin-left: 2px;
-    line-height: 1.2;
+    line-height: 1.25;
     display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 
-/* ── Main Wrapper & Container ── */
-.auth-clean-wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 24px 20px 60px;
-    width: 100%;
-}
-
-.auth-clean-container {
-    width: 100%;
-    max-width: 400px;
-    background: #ffffff;
-}
-
-/* ── Warm Terracotta Serif Heading (Identical to LinkedIn Screenshot) ── */
+/* ── Warm Terracotta Serif Headline (Exact LinkedIn Reference) ── */
 .auth-clean-title {
     font-family: 'Merriweather', -apple-system-headline, Georgia, 'Times New Roman', serif;
-    font-size: 38px;
+    font-size: 40px;
     font-weight: 300;
-    line-height: 1.22;
+    line-height: 1.2;
     color: #8F5849;
-    letter-spacing: -0.015em;
-    margin-bottom: 28px;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
 }
 
 .auth-clean-sub {
-    font-size: 15px;
-    color: rgba(0, 0, 0, 0.7);
-    margin-top: -18px;
-    margin-bottom: 24px;
+    font-size: 14.5px;
+    color: rgba(0, 0, 0, 0.65);
+    margin-top: -14px;
+    margin-bottom: 22px;
     line-height: 1.45;
 }
 
-/* ── Form & Field Layout ── */
+/* ── Form Fields ── */
 .auth-clean-form {
     display: flex;
     flex-direction: column;
@@ -131,11 +125,10 @@ body.auth-clean-body {
 
 .auth-field input:focus {
     border: 2px solid #0A66C2;
-    box-shadow: none;
-    padding: 0 13px; /* account for 2px border */
+    padding: 0 13px; /* visual alignment compensation */
 }
 
-/* Password wrapper with inline Show/Hide toggle */
+/* Password wrapper with inline Show/Hide toggle button */
 .auth-pw-wrap {
     position: relative;
     width: 100%;
@@ -176,8 +169,9 @@ body.auth-clean-body {
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
-    margin-top: 4px;
-    margin-bottom: 22px;
+    margin-top: 2px;
+    margin-bottom: 20px;
+    width: fit-content;
 }
 
 .auth-forgot-link:hover {
@@ -185,7 +179,7 @@ body.auth-clean-body {
     text-decoration: underline;
 }
 
-/* ── Primary Pill Button (Sign In / Agree & Join) ── */
+/* ── Primary Pill Button (Sign In / Agree & Join / Reset) ── */
 .btn-auth-primary {
     display: flex;
     align-items: center;
@@ -218,7 +212,7 @@ body.auth-clean-body {
 .auth-divider {
     display: flex;
     align-items: center;
-    margin: 22px 0;
+    margin: 20px 0;
     color: rgba(0, 0, 0, 0.6);
     font-size: 13px;
     text-align: center;
@@ -229,14 +223,14 @@ body.auth-clean-body {
     content: '';
     flex: 1;
     height: 1px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.18);
 }
 
 .auth-divider span {
     padding: 0 16px;
 }
 
-/* ── Secondary Outline Pill Buttons ── */
+/* ── Secondary Outline Pill Buttons (Google, Join now, Sign in) ── */
 .btn-auth-secondary {
     display: flex;
     align-items: center;
@@ -252,7 +246,7 @@ body.auth-clean-body {
     font-weight: 600;
     text-decoration: none;
     cursor: pointer;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
     transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
     font-family: inherit;
     box-sizing: border-box;
@@ -269,16 +263,66 @@ body.auth-clean-body {
     flex-shrink: 0;
 }
 
-/* ── Feedback Messages ── */
+/* ── Terms & Agreement Legal Disclaimer (Realistic Production Detail) ── */
+.auth-legal-text {
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.auth-legal-text a {
+    color: #0A66C2;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-legal-text a:hover {
+    text-decoration: underline;
+}
+
+/* ── Discrete Production Footer (Eliminates AI Prototype feel) ── */
+.auth-page-footer {
+    width: 100%;
+    max-width: 980px;
+    margin: 40px auto 0;
+    padding-top: 18px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px 20px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.auth-page-footer a {
+    color: rgba(0, 0, 0, 0.6);
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.auth-page-footer a:hover {
+    color: #0A66C2;
+    text-decoration: underline;
+}
+
+.auth-footer-copy {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+/* ── Error & Success Feedback ── */
 .error-msg {
     background: #fef2f2;
     border: 1px solid #fca5a5;
     color: #dc2626;
-    padding: 12px 14px;
-    border-radius: 6px;
+    padding: 10px 14px;
+    border-radius: 4px;
     font-size: 13.5px;
     font-weight: 500;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     display: none;
 }
 .error-msg.show { display: block; }
@@ -287,15 +331,15 @@ body.auth-clean-body {
     background: #f0fdf4;
     border: 1px solid #86efac;
     color: #16a34a;
-    padding: 12px 14px;
-    border-radius: 6px;
+    padding: 10px 14px;
+    border-radius: 4px;
     font-size: 13.5px;
     font-weight: 500;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     display: none;
 }
 .success-msg.show { display: block; }
 
-/* Password strength */
-.strength { margin-top: 6px; min-height: 16px; }
+/* Strength meter */
+.strength { margin-top: 5px; min-height: 16px; }
 #resetStrength { font-size: 12px; font-weight: 600; }
